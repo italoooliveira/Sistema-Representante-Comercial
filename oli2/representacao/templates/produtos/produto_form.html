@@ -1,0 +1,184 @@
+{% extends 'partials/dashboard.html' %}
+{% load widget_tweaks %}
+{% block custom-css%}
+    {{ form.media.css }}
+    <style>
+        input, select {width: 100%}
+    </style>
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Cadastro de produtos</h1>
+    <div>
+        <form action="{{ request.path }}" method="post" enctype='multipart/form-data'>
+            {% include 'partials/submit.html' %}
+            <div class="form-row mt-2">
+                <div class="form-group col-md-3">
+                    {% render_field form.possui_multiplo_venda %}
+                    Possui múltiplo de venda
+                </div>
+            </div>
+            <div id="imagem-selecionada">
+                {% if form.instance.imagem  %}
+                    <img width="200" src="{{ form.instance.imagem.url }}">
+                {% endif %}
+            </div>
+            <div class="form-row mt-4 mb-3">
+                <div class="form-group col-md-12">
+                    <label class="font-weight-bold">Imagem</label>
+                    <div class="imagem">
+                        {% render_field form.imagem %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div id="campo-multiplo-produto" class="d-none">
+                    <label class="font-weight-bold">Múltiplo de venda</label>
+                    {% render_field form.multiplo class="form-control" %}
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="font-weight-bold">Categoria</label>
+                    {% render_field form.id_categoria class="form-control" %}
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="font-weight-bold">Código</label>
+                    {% render_field form.codigo_produto class="form-control" placeholder="Ex: 00001" %}
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="font-weight-bold">Descrição</label>
+                    {% render_field form.descricao class="form-control" placeholder="Ex: Batata"%}
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="font-weight-bold">Preço Unitário</label>
+                    {% render_field form.custo_unitario class="form-control" %}
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="font-weight-bold">Comissão</label>
+                    {% render_field form.comissao class="form-control" %}
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="font-weight-bold">IPI</label>
+                    {% render_field form.ipi class="form-control" %}
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="font-weight-bold">Aliquota</label>
+                    {% render_field form.aliquota class="form-control" %}
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="font-weight-bold">Redução ICMS</label>
+                    {% render_field form.reducao_icms class="form-control" %}
+                </div>
+                <div class="form-group col-md-1">
+                    <label class="font-weight-bold">ST</label>
+                    {% render_field form.st class="form-control" %}
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="font-weight-bold">PIS</label>
+                    {% render_field form.pis class="form-control" %}
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="font-weight-bold">MVA ST</label>
+                    {% render_field form.mva_st class="form-control" %}
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">EAN / GETIN 13</label>
+                    {% render_field form.ean class="form-control" %}
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">DUN / GETIN 14</label>
+                    {% render_field form.dun class="form-control" %}
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="font-weight-bold">Unidade de Venda</label>
+                    {% render_field form.id_unidade_venda class="form-control" %}
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="font-weight-bold">Tipo de Embalagem</label>
+                    {% render_field form.id_tipo_embalagem class="form-control" %}
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="font-weight-bold">Quantidade da Embalagem</label>
+                    {% render_field form.quantidade_embalagem class="form-control" %}
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="font-weight-bold">Preço da Embalagem</label>
+                    {% render_field form.preco_embalagem class="form-control" %}
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="font-weight-bold">Validade</label>
+                    {% render_field form.validade class="form-control" %}
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="font-weight-bold">Preço Total</label>
+                    {% render_field form.preco_total class="form-control" %}
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="font-weight-bold">Empresa</label>
+                    {% render_field form.empresa class="form-control" %}
+                </div>
+            </div>
+            {% render_field form.errors %}
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block custom-scripts %}
+    {{ form.media.js }}
+    <script>
+        let mostraEscondeCampoMultiploVenda = function ()
+        {
+            let temMultiploVenda = $("#id_possui_multiplo_venda").is(":checked");
+
+            if(temMultiploVenda){
+                $("#campo-multiplo-produto")
+                    .removeClass("d-none")
+                    .addClass("form-group col-md-12");
+            }
+            else{
+                $("#campo-multiplo-produto")
+                    .removeClass("form-group col-md-12")
+                    .addClass("d-none");
+            }
+        }
+
+        let init = function(){
+            mostraEscondeCampoMultiploVenda();
+        }
+
+        $(document).ready(function(){
+            init();
+
+            $("input[type=file]").on("change", function() {
+                let fileName = $(this).val().split("\\").pop();
+
+                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+
+                mostraImagem();
+            });
+
+            $("#id_possui_multiplo_venda").change(function(){
+                mostraEscondeCampoMultiploVenda();
+            });
+
+            $("#id_custo_unitario").change(function(){
+                let temMultiploVenda = $("#id_possui_multiplo_venda").is(":checked");
+
+                if(temMultiploVenda){
+                    let multiplo = $("#id_multiplo").val();
+                    let preco = $("#id_custo_unitario").val();
+                    $("#id_preco_total").val(preco * multiplo);
+                }
+                else {
+                    let preco = $("#id_custo_unitario").val();
+                    $("#id_preco_total").val(preco);
+                }
+            });
+
+            $("#id_multiplo").change(function(){
+                let multiplo = $("#id_multiplo").val();
+                let preco = $("#id_custo_unitario").val();
+                $("#id_preco_total").val(preco * multiplo);
+            });
+        });
+    </script>
+{% endblock %}

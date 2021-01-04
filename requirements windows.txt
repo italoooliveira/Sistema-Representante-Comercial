@@ -1,0 +1,28 @@
+arabic-reshaper==2.1.0
+cairocffi @ file:///C:/Users/Italo/Documents/Oli2/oli2/cairocffi-1.2.0-cp37-cp37m-win_amd64.whl
+cffi @ file:///C:/Users/Italo/Documents/Oli2/oli2/cffi-1.14.4-cp37-cp37m-win_amd64.whl
+cycler==0.10.0
+Django==2.2.6
+django-appconf==1.0.4
+django-select2==7.4.2
+django-tempus-dominus==5.1.2.13
+django-widget-tweaks==1.4.8
+future==0.18.2
+html5lib==1.1
+kiwisolver==1.3.1
+matplotlib==3.3.3
+mysqlclient==2.0.1
+numpy==1.18.5
+pandas==1.1.5
+Pillow==8.0.1
+pycparser==2.20
+pyparsing==2.4.7
+PyPDF2==1.26.0
+python-bidi==0.4.2
+python-dateutil==2.8.1
+pytz==2020.1
+reportlab==3.5.53
+six==1.15.0
+sqlparse==0.4.1
+webencodings==0.5.1
+xhtml2pdf==0.2.5

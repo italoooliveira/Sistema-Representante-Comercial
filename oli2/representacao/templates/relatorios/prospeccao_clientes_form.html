@@ -1,0 +1,71 @@
+{% extends 'partials/dashboard.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Prospecções por usuário</h1>
+    <div>
+         <form action="{{ request.path }}">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {% render_field form.tipo_pesquisa%}
+                </div>
+                <div id="campo-quantidade-maxima" class="d-none">
+                    <label class="font-weight-bold">Quantidade máxima de resultados</label>
+                    {% render_field form.quantidade_maxima class="form-control"%}
+                </div>
+                <div id="campo-usuario" class="d-none">
+                    <label class="font-weight-bold">Usuário</label>
+                    {% render_field form.usuario class="form-control"%}
+                </div>
+            </div>
+            <div class="form-row mb-2">
+                <div class="form-group mr-2 mb-0 col-md-5">
+                    <input type="submit" class="btn btn-dark mb-2" value="Pesquisar"/>
+                </div>
+            </div>
+         </form>
+         {% if prospecoes %}
+         {% else %}
+         {% include 'partials/sem_registros.html' %}
+         {% endif %}
+    </div>
+</div>
+{% endblock %}
+{% block custom-scripts %}
+<script>
+    let mostraEscondeCampos = () => {
+        if($("#id_tipo_pesquisa_0").is(":checked")){
+            $("#campo-quantidade-maxima")
+                .removeClass("d-none")
+                .addClass("form-group col-md-12");
+
+            $("#campo-usuario")
+                .removeClass("form-group col-md-12")
+                .addClass("d-none");
+        }
+        else{
+            $("#campo-quantidade-maxima")
+                .removeClass("form-group col-md-12")
+                .addClass("d-none");
+
+            $("#campo-usuario")
+                .removeClass("d-none")
+                .addClass("form-group col-md-12");
+        }
+    }
+
+    let init = () => {
+        $("#id_tipo_pesquisa_0").prop("checked", true);
+
+        mostraEscondeCampos();
+    }
+
+    $(document).ready(function(){
+        init();
+
+        $("#id_tipo_pesquisa").change(function(){
+            mostraEscondeCampos();
+        });
+    });
+</script>
+{% endblock %}

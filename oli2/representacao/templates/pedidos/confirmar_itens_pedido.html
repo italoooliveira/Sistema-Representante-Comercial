@@ -1,0 +1,10 @@
+{% extends 'partials/dashboard.html' %}
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Deseja adicionar os itens ao pedido?</h1>
+    <div>
+        <a href="{% url 'cadastrar-itens-pedido' id_pedido%}" class="btn btn-success text-white">Sim</a>
+        <a href="{% url 'cadastrar-pedido' %}" class="btn btn-danger text-white">Não</a>
+    </div>
+</div>
+{% endblock %}

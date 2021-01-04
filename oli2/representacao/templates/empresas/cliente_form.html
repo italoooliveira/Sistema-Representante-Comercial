@@ -1,0 +1,116 @@
+{% extends 'partials/dashboard.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Cadastro de clientes</h1>
+    <div>
+        <form action="{{ request.path }}" method="post">
+            {% include 'partials/submit.html' %}
+            <div class="form-row">
+                <div class="form-group col-md-5">
+                    <label>
+                        {% render_field form.prospectado_por_usuario %}
+                        Prospectado por um usuário
+                    </label>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label class="font-weight-bold">Razão social</label>
+                    {% render_field form.razao_social class="form-control" placeholder="Ex: Ryan e Eduardo Entregas Expressas ME" %}
+                </div>
+                <div class="form-group col-md-5">
+                    <label class="font-weight-bold">Nome fantasia</label>
+                    {% render_field form.nome_fantasia class="form-control" placeholder="Ex: R&E Entregas Expressas"%}
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="font-weight-bold">CNPJ</label>
+                    {% render_field form.cnpj class="form-control" placeholder="Ex: 90.848.337/0001-46"%}
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="font-weight-bold">Contribuinte</label>
+                    {% render_field form.tipo_ie class="form-control" %}
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="font-weight-bold">Inscrição estadual</label>
+                    {% render_field form.inscricao_estadual class="form-control" placeholder="Ex: 400.338.194.266"%}
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="font-weight-bold">Endereço</label>
+                    {% render_field form.endereco class="form-control" placeholder="Ex: Rua Gibraltar"%}
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="font-weight-bold">Numero</label>
+                    {% render_field form.numero class="form-control" placeholder="Ex: 535"%}
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="font-weight-bold">Complemento</label>
+                    {% render_field form.complemento class="form-control" placeholder="Ex: Sala 1" %}
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="font-weight-bold">Bairro</label>
+                    {% render_field form.bairro class="form-control" placeholder="Ex: Santo Amaro"%}
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="font-weight-bold">Cidade</label>
+                    {% render_field form.cidade class="form-control" placeholder="Ex: São Paulo"%}
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="font-weight-bold">CEP</label>
+                    {% render_field form.cep class="form-control" placeholder="Ex: 04755-070"%}
+                </div>
+                <div class="form-group col-md-1">
+                    <label class="font-weight-bold">UF</label>
+                    {% render_field form.uf class="form-control" placeholder="Ex: SP"%}
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="font-weight-bold">Telefone</label>
+                    {% render_field form.telefone class="form-control" placeholder="Ex: (11) 3750-9740" %}
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="font-weight-bold">E-mail</label>
+                    {% render_field form.email class="form-control" %}
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="font-weight-bold">E-mail NFE</label>
+                    {% render_field form.email_nfe class="form-control" placeholder="Ex: contato@reentregas.com.br"%}
+                </div>
+                 <div id="campo-usuario-prospectado" class="d-none">
+                    <label class="font-weight-bold">Usuário que prospectou</label>
+                    {% render_field form.id_usuario class="form-control" placeholder="Ex: nfe@reentregas.com.br"%}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block custom-scripts %}
+<script>
+    let mostraEscondeCampoUsuario = () => {
+        let prospectadoPorUsuario = $("#id_prospectado_por_usuario").is(":checked");
+
+        if(prospectadoPorUsuario) {
+             $("#campo-usuario-prospectado")
+                .removeClass("d-none")
+                .addClass("form-group col-md-12");
+        }
+        else{
+            $("#campo-usuario-prospectado")
+                .removeClass("form-group col-md-12")
+                .addClass("d-none");
+        }
+    }
+
+    let init = () => {
+        mostraEscondeCampoUsuario();
+    }
+
+    $(document).ready(function(){
+        init();
+
+        $("#id_prospectado_por_usuario").change(function(){
+            mostraEscondeCampoUsuario();
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends 'partials/dashboard.html' %}
+{% load widget_tweaks %}
+{% block custom-css%}
+    {{ form.media.css }}
+    <style>
+        input, select {width: 100%}
+    </style>
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Cadastro de prepostos</h1>
+    <div>
+        <form action="{{ request.path }}" method="post">
+            <div class="form-row mb-2">
+                {% include 'partials/submit.html' %}
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>
+                        {% render_field form.possui_vinculo_empresa %}
+                        Possui vínculo com empresa
+                    </label>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>
+                        {% render_field form.possui_vinculo_cliente %}
+                        Possui vínculo com cliente
+                    </label>
+                </div>
+            </div>
+            <div class="form-row">
+                {% render_field form.id_usuario %}
+            </div>
+            <div class="form-row">
+                 <div class="form-group col-md-6">
+                     <label class="font-weight-bold">Nome</label>
+                     <input type="text" name="nome" maxlength="255" class="form-control" value="{{ preposto.id_usuario.nome }}" id="id_nome" disabled>
+                </div>
+                 <div class="form-group col-md-6">
+                     <label class="font-weight-bold">Telefone</label>
+                     <input type="text" name="telefone" maxlength="80" class="form-control" value="{{ preposto.id_usuario.telefone }}" id="id_telefone" disabled>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">E-mail</label>
+                    <input type="email" name="email" maxlength="254" class="form-control" value="{{ preposto.id_usuario.email }}" id="id_email" disabled>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">Comissão</label>
+                    {% render_field form.comissao class="form-control" placeholder="Ex: 2" %}
+                </div>
+            </div>
+            <div id="campo-empresas">
+                <div class="form-group col-md-12 mb-2">
+                    <label class="font-weight-bold">Empresa</label>
+                    {% render_field form.empresa class="form-control" %}
+                </div>
+            </div>
+            <div id="campo-clientes">
+                <div class="form-group col-md-12">
+                    <label class="font-weight-bold">Cliente</label>
+                    {% render_field form.cliente class="form-control" %}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block custom-scripts %}
+    {{ form.media.js }}
+    <script>
+        let mostraEscondeCampoEmpresas = () => {
+            let possuiVinculoEmpresa = $("#id_possui_vinculo_empresa").is(":checked");
+
+            if(possuiVinculoEmpresa){
+                $("#campo-empresas")
+                    .removeClass("d-none")
+                    .addClass("form-row");
+            }
+            else{
+                $("#campo-empresas")
+                    .removeClass("form-row")
+                    .addClass("d-none");
+            }
+        }
+
+        let mostraEscondeCampoClientes = () => {
+            let possuiVinculoCliente = $("#id_possui_vinculo_cliente").is(":checked");
+
+            if(possuiVinculoCliente){
+                $("#campo-clientes")
+                    .removeClass("d-none")
+                    .addClass("form-row");
+            }
+            else{
+                $("#campo-clientes")
+                    .removeClass("form-row")
+                    .addClass("d-none");
+            }
+        }
+
+        let init = () => {
+            mostraEscondeCampoEmpresas();
+            mostraEscondeCampoClientes();
+        }
+
+        $(document).ready(function(){
+            init();
+
+            $("#id_possui_vinculo_empresa").change(function(){
+                mostraEscondeCampoEmpresas();
+            });
+
+            $("#id_possui_vinculo_cliente").change(function(){
+                mostraEscondeCampoClientes();
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'partials/dashboard.html' %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container-fluid">
+        <h1 class="h3 mb-4 text-gray-800">Unidades de venda cadastradas</h1>
+        <div id="formulario-pesquisa" class="d-none">
+            <form action="{{ request.path }}">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="font-weight-bold">Sigla</label>
+                        {% render_field form.sigla class="form-control" placeholder="Ex: Kg"%}
+                    </div>
+                </div>
+                <div class="form-row mb-2">
+                    <div class="form-group mr-2 mb-0 col-md-5">
+                        <input type="submit" class="btn btn-dark mb-2" value="Pesquisar"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% include 'partials/botao_pesquisa.html' %}
+        {% if unidades_venda %}
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for unidade in unidades_venda %}
+                        <li class="list-group-item">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <p class="font-weight-bold"> {{ unidade.sigla }}</p>
+                                </div>
+                            </div>
+                            <div class="d-flex">
+                                <a href="{% url 'editar-unidade-venda' unidade.id_unidade_venda %}" class="btn btn-success text-white">Editar</a>
+                                <a href="{% url 'excluir-unidade-venda' unidade.id_unidade_venda %}" class="btn btn-danger ml-2 text-white">Excluir</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div>
+            {% if unidades_venda.has_other_pages %}
+            <ul class="pagination">
+                {% if unidades_venda.has_previous %}
+                <li class="page-item">
+                    <a href="?page={{ unidades_venda.previous_page_number }}" class="page-link">&laquo;</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">&laquo;</a>
+                </li>
+                {% endif %}
+                {% for page in unidades_venda.paginator.page_range %}
+                {% if unidades_venda.number == page %}
+                <li class="page-item active">
+                    <a class="page-link">{{ page }}</a>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a href="?page={{ page }}" class="page-link">{{ page }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% if unidades_venda.has_next %}
+                <li class="page-item">
+                    <a href="?page={{ unidades_venda.next_page_number }}" class="page-link">&raquo;</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">&raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+            {% endif %}
+        </div>
+        {% else %}
+        {% include 'partials/sem_registros.html' %}
+        {% endif %}
+    </div>
+{% endblock %}
+{% block custom-scripts %}
+    {% include 'partials/pesquisa_script.html' %}
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends 'partials/dashboard.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Cadastro de pedidos</h1>
+    <div>
+        <form action="{{ request.path }}" method="post">
+            {% include 'pedidos/breadcrumbs_pedidos.html' %}
+            {% include 'partials/submit.html' %}
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label class="font-weight-bold">Status do pedido</label>
+                    {% render_field form.status class="form-control" %}
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="font-weight-bold">Usuário Responsável</label>
+                    {% render_field form.id_usuario class="form-control" %}
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">Número do Pedido</label>
+                    {% render_field form.numero_pedido class="form-control" placeholder="Ex: 000001" %}
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">Ordem de compra</label>
+                    {% render_field form.ordem_compra class="form-control" placeholder="Ex: 000001" %}
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">Fornecedor</label>
+                    {% render_field form.id_empresa_representada class="form-control" %}
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">Cliente</label>
+                    {% render_field form.id_empresa_cliente class="form-control" %}
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="font-weight-bold">Razão Social</label>
+                    <input id="pedido-razao-social" class="form-control" type="text" disabled/>
+                </div>
+                <div class="form-group col-md-5">
+                    <label class="font-weight-bold">Nome fantasia</label>
+                    <input id="pedido-nome-fantasia" class="form-control" type="text" disabled/>
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="font-weight-bold">CNPJ</label>
+                    <input id="pedido-cnpj" class="form-control" type="text" disabled/>
+                </div>
+                <div class="form-group col-md-5">
+                    <label class="font-weight-bold">Inscrição Estadual</label>
+                    <input id="pedido-ie" class="form-control" type="text" disabled/>
+                </div>
+                <div class="form-group col-md-5">
+                    <label class="font-weight-bold">Endereço</label>
+                    <input id="pedido-endereco" class="form-control" type="text" disabled/>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="font-weight-bold">Número</label>
+                    <input id="pedido-numero" class="form-control" type="text" disabled/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">Complemento</label>
+                    <input id="pedido-complemento" class="form-control" type="text" disabled/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">Bairro</label>
+                    <input id="pedido-bairro" class="form-control" type="text" disabled/>
+                </div>
+                <div class="form-group col-md-5">
+                    <label class="font-weight-bold">CEP</label>
+                    <input id="pedido-cep" class="form-control" type="text" disabled/>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="font-weight-bold">UF</label>
+                    <input id="pedido-uf" class="form-control" type="text" disabled/>
+                </div>
+                <div class="form-group col-md-5">
+                    <label class="font-weight-bold">Telefone</label>
+                    <input id="pedido-telefone" class="form-control" type="text" disabled/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">E-mail</label>
+                    <input id="pedido-email" class="form-control" type="text" disabled/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">E-mail NFe</label>
+                    <input id="pedido-email-nfe" class="form-control" type="text" disabled/>
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="font-weight-bold">Contato</label>
+                    {% render_field form.id_contato class="form-control" %}
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">Data do Pedido</label>
+                    {% render_field form.data_pedido class="form-control" placeholder="Ex: dd/mm/aaaa" %}
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">Data de entrega</label>
+                    {% render_field form.data_entrega class="form-control" placeholder="Ex: dd/mm/aaaa" %}
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="font-weight-bold">Forma de pagamento</label>
+                    {% render_field form.id_forma_pagamento class="form-control" %}
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="font-weight-bold">Observação</label>
+                    {% render_field form.observacao class="form-control" placeholder="" %}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block custom-scripts %}
+<script>
+    let buscarClientes = () => {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'buscar-cliente' %}",
+            contentType: 'application/json',
+            data: JSON.stringify($("#id_id_empresa_cliente").val()),
+            success: function(data){
+                $("#pedido-razao-social").val(data[0].fields.razao_social)
+                $("#pedido-nome-fantasia").val(data[0].fields.nome_fantasia),
+                $("#pedido-cnpj").val(data[0].fields.cnpj),
+                $("#pedido-ie").val(data[0].fields.inscricao_estadual),
+                $("#pedido-endereco").val(data[0].fields.endereco),
+                $("#pedido-complemento").val(data[0].fields.complemento),
+                $("#pedido-bairro").val(data[0].fields.bairro),
+                $("#pedido-cep").val(data[0].fields.cep),
+                $("#pedido-cidade").val(data[0].fields.cidade),
+                $("#pedido-uf").val(data[0].fields.uf),
+                $("#pedido-telefone").val(data[0].fields.telefone),
+                $("#pedido-email").val(data[0].fields.email),
+                $("#pedido-email-nfe").val(data[0].fields.email_nfe)
+            },
+            error: function(data){
+                console.log(data);
+            }
+        });
+    }
+
+    let init = () => {
+        buscarClientes();
+    }
+
+    $(document).ready(function(){
+        init();
+        
+        $("#id_id_empresa_cliente").change(function(){
+            buscarClientes();
+        });
+    });
+</script>
+{% endblock %}

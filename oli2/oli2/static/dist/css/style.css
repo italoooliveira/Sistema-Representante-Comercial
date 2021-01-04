@@ -1,0 +1,47 @@
+a {
+    text-decoration: none !important;
+}
+
+.btn-visualizar-formulario-pesquisa {
+    cursor: pointer;
+    margin: 10px 0px 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #41c19e;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    color: #fff;
+}
+
+.breadcrumb a {
+    color: #000000;
+    text-decoration: none;
+    background-color: transparent;
+    font-weight: bold;
+}
+
+.scroll-to-top {
+    z-index: 99;
+}
+
+.scroll-to-top .fas {
+    line-height: unset;
+}
+
+.imagem input[type="radio"],
+.imagem input[type="checkbox"],
+.imagem label{
+    display: none
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    padding: 0px 5px 5px 5px !important;
+}
+
+#id_tipo_pesquisa {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 0;
+}

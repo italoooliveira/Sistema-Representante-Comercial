@@ -1,0 +1,18 @@
+{% extends 'partials/dashboard.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Cadastro de categorias</h1>
+    <div>
+        <form action="{{ request.path }}" method="post">
+            <div class="form-row mt-2">
+                <div class="form-group col-md-5">
+                    <label class="font-weight-bold">Nome da categoria</label>
+                    {% render_field form.nome_categoria class="form-control" placeholder="Ex: Commodities" %}
+                </div>
+            </div>
+            {% include 'partials/submit.html' %}
+        </form>
+    </div>
+</div>
+{% endblock %}

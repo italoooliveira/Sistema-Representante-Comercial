@@ -1,0 +1,28 @@
+{% load static %}
+<script src="{% static 'dist/vendor/jquery/jquery.min.js'%}"></script>
+<script src="{% static 'dist/vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+<script src="{% static 'dist/vendor/jquery-easing/jquery.easing.min.js'%}"></script>
+<script src="{% static 'dist/js/sb-admin-2.min.js'%}"></script>
+<script src="{% static 'dist/js/functions.js'%}"></script>
+<script>
+    let mostraImagem = function(){
+        $('input[type=file]').each(function(index){
+            if ($('input[type=file]').eq(index).val() != ""){
+                lerURL(this);
+            }
+        });
+    }
+
+    let lerURL = function(input) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                $("#imagem-selecionada").html('<img width="200" src='+e.target.result+'>');
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+{{ form.media }}

@@ -1,0 +1,114 @@
+{% extends 'partials/dashboard.html' %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="container-fluid">
+        <h1 class="h3 mb-4 text-gray-800">Empresas cadastradas</h1>
+        <div id="formulario-pesquisa" class="d-none">
+            <form action="{{ request.path }}">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="font-weight-bold">Razão social</label>
+                        {% render_field form.razao_social class="form-control" placeholder="Ex: Ryan e Eduardo Entregas Expressas ME" %}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="font-weight-bold">Nome fantasia</label>
+                        {% render_field form.nome_fantasia class="form-control" placeholder="Ex: R&E Entregas Expressas" %}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                          <label class="font-weight-bold">CNPJ</label>
+                          {% render_field form.cnpj class="form-control" placeholder="Ex: 90.848.337/0001-46"%}
+                    </div>
+                    <div class="form-group col-md-6">
+                          <label class="font-weight-bold">Inscrição estadual</label>
+                          {% render_field form.inscricao_estadual class="form-control" placeholder="Ex: 400.338.194.266"%}
+                    </div>
+                    <div class="col-md-12">
+                        <label class="font-weight-bold">Tipo de empresa</label>
+                        {% render_field form.tipo_empresa class="form-control" %}
+                    </div>
+                </div>
+                <div class="form-row mt-3 mb-2">
+                    <div class="form-group mr-2 mb-0 col-md-5">
+                        <input type="submit" class="btn btn-dark mb-2" value="Pesquisar"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% include 'partials/botao_pesquisa.html' %}
+        {% if empresas %}
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for empresa in empresas %}
+                        <li class="list-group-item">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    {% if empresa.nome_fantasia %} <p class="font-weight-bold"> {{ empresa.nome_fantasia }}</p> {% endif %}
+                                    <p> Razão Social: {{ empresa.razao_social }}</p>
+                                    <p> CNPJ: {{ empresa.cnpj }}</p>
+                                    {% if empresa.inscricao_estadual %} <p> Inscrição Estadual: {{ empresa.inscricao_estadual }}</p> {% endif %}
+                                    {% if empresa.telefone %} <p> Telefone: {{ empresa.telefone }}</p> {%  endif %}
+                                    {% if empresa.email %} <p> Email: {{ empresa.email }}</p> {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    {% if empresa.logo %}
+                                        <div class="d-flex mb-3">
+                                            <img class="mw-100 ml-lg-auto" width="200" src="media/{{ empresa.logo }}">
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="d-flex">
+                                <a href="{% url 'editar-empresa' empresa.id_empresa %}" class="btn btn-success text-white">Editar</a>
+                                <a href="{% url 'excluir-empresa' empresa.id_empresa %}" class="btn btn-danger ml-2 text-white">Excluir</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div>
+            {% if empresas.has_other_pages %}
+            <ul class="pagination">
+                {% if empresas.has_previous %}
+                <li class="page-item">
+                    <a href="?page={{ empresas.previous_page_number }}" class="page-link">&laquo;</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">&laquo;</a>
+                </li>
+                {% endif %}
+                {% for page in empresas.paginator.page_range %}
+                {% if empresas.number == page %}
+                <li class="page-item active">
+                    <a class="page-link">{{ page }}</a>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a href="?page={{ page }}" class="page-link">{{ page }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% if empresas.has_next %}
+                <li class="page-item">
+                    <a href="?page={{ usuarios.next_page_number }}" class="page-link">&raquo;</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">&raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+            {% endif %}
+        </div>
+        {% else %}
+        {% include 'partials/sem_registros.html' %}
+        {% endif %}
+    </div>
+{% endblock %}
+{% block custom-scripts %}
+    {% include 'partials/pesquisa_script.html' %}
+{% endblock %}

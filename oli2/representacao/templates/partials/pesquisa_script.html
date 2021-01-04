@@ -1,0 +1,20 @@
+<script>
+    $(document).ready(function(){
+        let visible = false;
+
+        $("#btn-pesquisa").click(function(){
+            if(!visible){
+                $("#formulario-pesquisa").removeClass("d-none");
+                $(".btn-visualizar-formulario-pesquisa").css("background-color","#da2121");
+                $(".btn-visualizar-formulario-pesquisa i").removeClass("fa-search").addClass("fa-times");
+                visible = true;
+            }
+            else {
+                $("#formulario-pesquisa").addClass("d-none");
+                visible = false;
+                $(".btn-visualizar-formulario-pesquisa").css("background-color","#41c19e");
+                $(".btn-visualizar-formulario-pesquisa i").removeClass("fa-times").addClass("fa-search");
+            }
+        });
+    });
+</script>

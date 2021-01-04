@@ -1,0 +1,107 @@
+{% load static %}
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <a style="font-size: 40px;" class="sidebar-brand d-flex align-items-center justify-content-center my-2" href="">
+        <!--<img src="" width="130">!-->
+        Oli 2
+    </a>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConfiguracoes" aria-expanded="true" aria-controls="collapseConfiguracoes">
+            <i class="fa fa-cogs" aria-hidden="true"></i>
+            <span>Opções avançadas</span>
+        </a>
+        <div id="collapseConfiguracoes" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{% url 'cadastrar-minha-empresa' %}">Minha empresa</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsuarios" aria-expanded="true" aria-controls="collapseUsuarios">
+            <i class="fas fa-user-circle"></i>
+            <span>Usuários</span>
+        </a>
+        <div id="collapseUsuarios" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{% url 'usuarios' %}">Usuários</a>
+                <a class="collapse-item" href="{% url 'cadastrar-usuario' %}">Cadastro de usuários</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEmpresas" aria-expanded="true" aria-controls="collapseEmpresas">
+            <i class="fas fa-briefcase"></i>
+            <span>Empresas</span>
+        </a>
+        <div id="collapseEmpresas" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{% url 'empresas' %}">Empresas</a>
+                <a class="collapse-item" href="{% url 'cadastrar-empresa' %} ">Cadastro de empresas</a>
+                <a class="collapse-item" href="{% url 'clientes' %}">Clientes</a>
+                <a class="collapse-item" href="{% url 'cadastrar-cliente' %}">Cadastro de clientes</a>
+                <a class="collapse-item" href="{% url 'tipos-empresa' %}">Tipos de empresas</a>
+                <a class="collapse-item" href="{% url 'cadastrar-tipo-empresa' %}">Cadastro de tipos </br> de empresas</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePessoas" aria-expanded="true" aria-controls="collapsePessoas">
+            <i class="fas fa-users"></i>
+            <span>Pessoas</span>
+        </a>
+        <div id="collapsePessoas" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{% url 'prepostos' %}">Prepostos</a>
+                <a class="collapse-item" href="{% url 'cadastrar-rotas-prepostos' %}">Rotas dos prepostos</a>
+                <a class="collapse-item" href="{% url 'contatos' %}">Contatos</a>
+                <a class="collapse-item" href="{% url 'cadastrar-contato' %}">Cadastro de contatos</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProdutos" aria-expanded="true" aria-controls="collapseProdutos">
+            <i class="fas fa-box-open"></i>
+            <span>Produtos</span>
+        </a>
+        <div id="collapseProdutos" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{% url 'produtos' %}">Produtos</a>
+                <a class="collapse-item" href="{% url 'cadastrar-produto' %}">Cadastro de produtos</a>
+                <a class="collapse-item" href="{% url 'categorias' %}">Categorias</a>
+                <a class="collapse-item" href="{% url 'cadastrar-categoria' %}">Cadastro de categorias</a>
+                <a class="collapse-item" href="{% url 'unidades-venda' %}">Unidades de venda</a>
+                <a class="collapse-item" href="{% url 'cadastrar-unidade-venda' %}">Cadastro de </br> unidades de venda</a>
+                <a class="collapse-item" href="{% url 'tipos-embalagem' %}">Tipos de embalagem</a>
+                <a class="collapse-item" href="{% url 'cadastrar-tipo-embalagem' %}">Cadastro de </br> tipos de embalagem</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePedidos" aria-expanded="true" aria-controls="collapsePedidos">
+            <i class="fas fa-donate"></i>
+            <span>Pedidos</span>
+        </a>
+        <div id="collapsePedidos" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{% url 'pedidos' %}">Pedidos</a>
+                <a class="collapse-item" href="{% url 'cadastrar-pedido' %}">Cadastro de pedidos</a>
+                <a class="collapse-item" href="{% url 'formas-pagamento' %}">Formas de pagamento</a>
+                <a class="collapse-item" href="{% url 'cadastrar-forma-pagamento' %}">Cadastro de </br> formas de pagamento</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAcompanhamentos" aria-expanded="true" aria-controls="collapseAcompanhamentos">
+            <i class="fa fa-chart-bar" aria-hidden="true"></i>
+            <span>Relatórios</span>
+        </a>
+        <div id="collapseAcompanhamentos" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="py-2 collapse-inner rounded">
+                <!--<a class="collapse-item" href="">Curva ABC</a>!-->
+                <a class="collapse-item" href="{% url 'acompanhamentos' %}">Tendências</a>
+                <a class="collapse-item" href="{% url 'prospeccoes-clientes' %}">Prospecção de clientes</a>
+                <a class="collapse-item" href="{% url 'clientes-sem-pedido' %}">Clientes sem pedidos</a>
+                <a class="collapse-item" href="{% url 'cancelamentos-pedidos-clientes' %}">Clientes que mais <br/> cancelaram pedidos</a>
+            </div>
+        </div>
+    </li>
+</ul>

@@ -1,0 +1,215 @@
+<html>
+    <head>
+        <title>Pedido</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+            #pdf {
+                font-family: Arial, Helvetica, sans-serif;
+                width: 100%;
+                max-width: 1140px;
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+                margin-right: auto;
+                margin-left: auto;
+                font-size: 12px;
+            }
+            table {
+                width: 100%;
+            }
+            table td {
+                padding: 0.5rem !important
+            }
+            .padding-0 {
+                padding: 0.25rem !important
+            }
+            .text-align-center {
+                text-align: center;
+            }
+            .btb-0 {
+                border-top: 0 !important;
+                border-bottom: 0 !important;
+            }
+            .br-0 {
+                border-right: 0 !important;
+            }
+            .bl-0 {
+                border-left: 0 !important;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="pdf">
+            <table border="1">
+                <tr class="text-align-center">
+                    <td colspan="2" class="br-0">
+                        {% if minha_empresa.logo %}
+                            <img width="200" src="http://{{base_url}}{{ minha_empresa.logo.url }}">
+                        {% endif %}
+                    </td>
+                    <td colspan="2" class="bl-0 br-0">
+                        <h4>
+                            <stroke>{{ minha_empresa.razao_social }}</stroke>
+                        </h4>
+                        <h5>Pedido Nº {{ pedido.numero_pedido }}</h5>
+                        <h5>{{ pedido.data_pedido }}</h5>
+                    </td>
+                    <td colspan="2" class="bl-0">
+                        {% if pedido.id_empresa_representada.logo %}
+                            <img width="200" src="http://{{base_url}}{{ pedido.id_empresa_representada.logo.url }}">
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <h4>
+                            <stroke>Representada:</stroke>
+                            {% if pedido.id_empresa_representada.razao_social %}
+                                {{ pedido.id_empresa_representada.razao_social }} /
+                            {% endif %}
+                            {% if pedido.id_empresa_representada.nome_fantasia %}
+                                {{ pedido.id_empresa_representada.nome_fantasia }}
+                            {% endif %}
+                        </h4>
+                    </td>
+                </tr>
+                <tr class="btb-0">
+                    <td colspan="3" class="br-0">
+                        <h4>
+                            <stroke>Cliente:</stroke>
+                            {% if pedido.id_empresa_cliente.razao_social %} {{ pedido.id_empresa_cliente.razao_social }} {% endif %}
+                        </h4>
+                    </td>
+                    <td colspan="3" class="bl-0">
+                        <h4>
+                            <stroke>Nome fantasia:</stroke>
+                            {% if pedido.id_empresa_cliente.nome_fantasia %}
+                                {{ pedido.id_empresa_cliente.nome_fantasia }}
+                            {% endif %}
+                        </h4>
+                    </td>
+                </tr>
+                <tr class="btb-0">
+                    <td colspan="6">
+                        <h4>
+                            <stroke>CNPJ:</stroke>
+                            {{ pedido.id_empresa_cliente.cnpj }}
+                        </h4>
+                    </td>
+                </tr>
+                <tr class="btb-0">
+                    <td colspan="6">
+                        <h4>
+                            <stroke>Endereço:</stroke>
+                            {% if pedido.id_empresa_cliente.endereco %}
+                                {{ pedido.id_empresa_cliente.endereco }}
+                            {% endif %}
+                        </h4>
+                    </td>
+                </tr>
+                <tr class="btb-0">
+                    <td colspan="3" class="br-0">
+                        <h4>
+                            <stroke>Bairro:</stroke>
+                            {% if pedido.id_empresa_cliente.bairro %}
+                                {{ pedido.id_empresa_cliente.bairro }}
+                            {% endif %}
+                        </h4>
+                    </td>
+                    <td colspan="3" class="bl-0">
+                        <h4>
+                            <stroke>CEP:</stroke>
+                            {% if pedido.id_empresa_cliente.bairro %}
+                                {{ pedido.id_empresa_cliente.bairro }}
+                            {% endif %}
+                        </h4>
+                    </td>
+                </tr>
+                <tr class="btb-0">
+                    <td colspan="3" class="br-0">
+                        <h4>
+                            <stroke>Cidade:</stroke>
+                            {% if pedido.id_empresa_cliente.cidade %}
+                                {{ pedido.id_empresa_cliente.cidade }}
+                            {% endif %}
+                        </h4>
+                    </td>
+                    <td colspan="3" class="bl-0">
+                        <h4>
+                            <stroke>Estado:</stroke>
+                            {% if pedido.id_empresa_cliente.uf %}
+                                {{ pedido.id_empresa_cliente.uf }}
+                            {% endif %}
+                        </h4>
+                    </td>
+                </tr>
+                <tr class="btb-0">
+                    <td colspan="3" class="br-0">
+                        <h4>
+                            <stroke>Telefone:</stroke>
+                            {% if pedido.id_empresa_cliente.telefone %}
+                                {{ pedido.id_empresa_cliente.telefone }}
+                            {% endif %}
+                        </h4>
+                    </td>
+                    <td colspan="3" class="bl-0">
+                        <h4>
+                            <stroke>E-mail:</stroke>
+                            {% if pedido.id_empresa_cliente.email %}
+                                {{ pedido.id_empresa_cliente.email }}
+                            {% endif %}
+                        </h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="padding-0 ">
+                        <stroke>Produto</stroke>
+                    </td>
+                    <td colspan="1" class="padding-0 text-align-center">
+                        <stroke>Quantidade</stroke>
+                    </td>
+                    <td colspan="1" class="padding-0 text-align-center">
+                        <stroke>Preço Tabela</stroke>
+                    </td>
+                    <td colspan="1" class="padding-0 text-align-center">
+                        <stroke>Subtotal</stroke>
+                    </td>
+                </tr>
+                {% for item in itens %}
+                    <tr>
+                        <td colspan="3">
+                            {{ item.id_produto.descricao }}
+                        </td>
+                        <td colspan="1" class="text-align-center">
+                            {{ item.quantidade }}
+                        </td>
+                        <td colspan="1" class="text-align-center">
+                            R$ {{ item.id_produto.custo_unitario }}
+                        </td>
+                        <td colspan="1" class="text-align-center">
+                            R$ {{ item.custo_total }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="6">
+                        <h4>
+                            <stroke>Forma de pagamento:</stroke> {{ pedido.id_forma_pagamento }}
+                        </h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <h4>
+                            <stroke>Informações adicionais:</stroke>
+                            {% if pedido.observacao %}
+                                {{ pedido.observacao }}
+                            {% endif %}
+                        </h4>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

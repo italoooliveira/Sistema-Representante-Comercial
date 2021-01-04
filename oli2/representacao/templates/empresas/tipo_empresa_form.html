@@ -1,0 +1,18 @@
+{% extends 'partials/dashboard.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Cadastro de tipos de empresa</h1>
+    <div>
+        <form action="{{ request.path }}" method="post">
+            {% include 'partials/submit.html' %}
+            <div class="form-row mt-2">
+                <div class="form-group col-md-5">
+                    <label class="font-weight-bold">Tipo</label>
+                    {% render_field form.tipo class="form-control" placeholder="Ex: Fornecedor" %}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

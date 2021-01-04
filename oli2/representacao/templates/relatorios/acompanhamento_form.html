@@ -1,0 +1,62 @@
+{% extends 'partials/dashboard.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Nova tendência</h1>
+    <div>
+        <form action="{{ request.path }}" method="post">
+            {% include 'partials/submit.html' %}
+            <div class="form-row mt-2">
+                <div class="form-group col-md-6">
+                     <label class="font-weight-bold">Meta do mês (R$)</label>
+                     {% render_field form.meta_geral class="form-control" %}
+                </div>
+                <div class="form-group col-md-6">
+                     <label class="font-weight-bold">Dias úteis no mes</label>
+                     {% render_field form.dias_uteis class="form-control" %}
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">Data inicial</label>
+                    {% render_field form.data_inicial class="form-control" %}
+                </div>
+                 <div class="form-group col-md-6">
+                    <label class="font-weight-bold">Data final</label>
+                    {% render_field form.data_final class="form-control" %}
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="font-weight-bold">Dias trabalhados</label>
+                    {% render_field form.dias_trabalhados class="form-control" %}
+                </div>
+            </div>
+        </form>
+        <div class="card shadow mb-4">
+            {% if tendencia %}
+            <div class="text-center">
+                <img src="data:image/png;base64,{{ tendencia|safe }}">
+            </div>
+            {% endif %}
+            {% if porcentagem%}
+            <div class="text-center">
+                <img src="data:image/png;base64,{{ porcentagem|safe }}">
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <p>Total faturado até o momento: <span class="font-weight-bold">R$ {{ total_faturado_ate }}</span></p>
+                        <p>Percentual da meta até o momento: <span class="font-weight-bold">{{ percentual_da_meta_ate }} % </span></p>
+                        <p>Tendência de faturamento final: <span class="font-weight-bold">R$ {{ tendencia_de_faturamento }} </span></p>
+                        <p>Faturamento diário necessário:
+                            {% if total_faturado_ate >= meta_geral %}
+                                <span class="font-weight-bold">Meta atingida</span>
+                            {% else %}
+                                <span class="font-weight-bold">R$ {{ faturamento_diario_necessario }}</span>
+                            {% endif %}
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

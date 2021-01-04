@@ -1,0 +1,213 @@
+{% extends 'partials/dashboard.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Cadastro de itens do pedido</h1>
+    <div>
+        <form>
+            {% include 'pedidos/breadcrumbs_pedidos.html' %}
+            {% include 'partials/submit.html' %}
+            <div class="form-row mt-3">
+                <div class="col-12">
+                    <p class="font-weight-bold">Número do pedido: <span class="text-dark font-weight-bold"> {{ pedido.numero_pedido }}</span></p>
+                    {% if representada.possui_pedido_minimo %}
+                    <p class="font-weight-bold">Pedido mínimo: <span class="text-danger">R$ {{ representada.pedido_minimo }}</span></p>
+                    {% endif %}
+                    <p class="font-weight-bold">Total do pedido: <span class="text-success">R$ {{ pedido.total_pedido }}</span></p>
+                    <!--<p class="font-weight-bold">Valor total do pedido: <span class="text-danger">R$ 00,00 </span></p>!-->
+                </div>
+            </div>
+            <div class="form-row mt-3">
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">Produto</label>
+                    <select id="produto-pedido" class="form-control">
+                        <option value="0">---------</option>
+                        {% for produto in produtos%}
+                            <option value="{{produto.id_produto}}" data-preco-total="{{produto.preco_total}}" data-codigo="{{produto.codigo_produto}}">
+                                {{produto.descricao}}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">Quantidade do produto</label>
+                    <input id="quantidade-produto-pedido" type="text" class="form-control"/>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">Preço original</label>
+                    <input id="preco-original-produto-pedido" type="text" class="form-control" disabled/>
+                </div>
+                  <div class="form-group col-md-6">
+                    <label class="font-weight-bold">Preço de venda</label>
+                    <input id="preco-venda-produto-pedido" type="text" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <button type="button" id="adiciona-item-pedido" class="btn btn-dark font-weight-bold">Adicionar Item</button>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-12">
+                    <div id="card-itens-pedido" class="d-none card shadow mb-4">
+                        <div class="card-body">
+                            <ul id="itens-pedido" class="list-group list-group-flush">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block custom-scripts %}
+<script>
+  let itensPedido = [];
+  let itensPedidoEnvio = [];
+
+  let mandarEdicaoItem = (index) => {
+       $("#produto-pedido").val(itensPedido[index].id_produto);
+       $("#quantidade-produto-pedido").val(itensPedido[index].quantidade);
+       $("#preco-original-produto-pedido").val(itensPedido[index].custo_unitario_original);
+       $("#preco-venda-produto-pedido").val(itensPedido[index].custo_unitario);
+
+       itensPedido.splice(index, 1);
+  }
+
+  let removerDaLista = (index) => {
+       itensPedido.splice(index, 1);
+
+       atualizaExibeItensPedido();
+  }
+
+  let atualizaExibeItensPedido = () => {
+       let buffer = "";
+
+       if(itensPedido.length > 0){
+            $("#card-itens-pedido").removeClass("d-none");
+
+            $.each(itensPedido, (index, item) => {
+                buffer+= `
+                    <li class="list-group-item">
+                        <p>Código do produto: <span id="item-codigo-produto" class="font-weight-bold">${item.codigo_produto}</span></p>
+                        <p>Descrição: <span id="item-descricao-produto" class="font-weight-bold">${item.descricao}</span></p>
+                        <p>Quantidade: <span id="item-quantidade" class="font-weight-bold">${item.quantidade}</span></p>
+                        <p>Valor unitario: <span id="item-preco-produto" class="font-weight-bold">${String(item.custo_unitario).replace(".",",")}</span></p>
+                        <p>Valor total: <span id="item-valor-total" class="font-weight-bold">${String(item.custo_total).replace(".",",")}</span></p>
+                        <p>
+                            <button type="button" onclick="mandarEdicaoItem(${index})" class="btn btn-success text-white">Editar</button>
+                            <button type="button" onclick="removerDaLista(${index})" class="btn btn-danger text-white">Remover</button>
+                        </p>
+                    </li>`;
+
+                $("#itens-pedido").html(buffer);
+            });
+       }
+       else{
+            buffer += `<li class="list-group-item"></li>`;
+
+            $("#itens-pedido").html(buffer);
+            $("#card-itens-pedido").addClass("d-none");
+       }
+  }
+
+  $(document).ready(function(){
+      {% if itens %}
+        {% for item in itens %}
+            itensPedido.push({
+                'id_pedido': "{{ item.id_pedido.id_pedido }}",
+                'id_produto': "{{ item.id_produto.id_produto }}",
+                'codigo_produto': "{{ item.id_produto.codigo_produto }}",
+                'descricao': "{{ item.id_produto.descricao }}",
+                'quantidade': "{{ item.quantidade }}",
+                'custo_unitario': "{{ item.id_produto.custo_unitario }}",
+                'custo_unitario_original': "{{ item.id_produto.custo_unitario }}",
+                'custo_total': "{{ item.custo_total }}"
+            });
+        {% endfor %}
+
+        atualizaExibeItensPedido();
+      {% endif %}
+
+      $("#produto-pedido").change(function(){
+         let custo_unitario = $("#produto-pedido option:selected").data("preco-total");
+
+         $("#preco-original-produto-pedido").val(custo_unitario);
+         $("#preco-venda-produto-pedido").val(custo_unitario);
+      });
+
+      $("#adiciona-item-pedido").click(function(e){
+         e.preventDefault();
+
+         let id_produto = $("#produto-pedido").val();
+         let descricao = $("#produto-pedido option:selected").text();
+         let quantidade = $("#quantidade-produto-pedido").val();
+         let quantidade_ponto = quantidade.replace(",",".");
+         quantidade_ponto = parseFloat(quantidade_ponto);
+         let codigo_produto = $("#produto-pedido option:selected").data("codigo");
+         let custo_unitario_original = $("#preco-original-produto-pedido").val();
+         let custo_unitario = $("#preco-venda-produto-pedido").val();
+         let custo_unitario_ponto = custo_unitario.replace(",",".");
+         custo_unitario_ponto = parseFloat(custo_unitario_ponto);
+
+         let item = {
+            'id_item_pedido': 0,
+            'id_pedido': "{{ pedido.id_pedido }}",
+            'id_produto': id_produto,
+            'codigo_produto': codigo_produto,
+            'descricao': descricao,
+            'quantidade': quantidade_ponto,
+            'custo_unitario': custo_unitario_ponto,
+            'custo_unitario_original': custo_unitario_original,
+            'custo_total': parseFloat(custo_unitario_ponto * quantidade_ponto)
+         }
+
+         itensPedido.push(item);
+
+         atualizaExibeItensPedido();
+
+         $("#produto-pedido").val(0);
+         $("#quantidade-produto-pedido").val("");
+         $("#preco-original-produto-pedido").val(0);
+         $("#preco-venda-produto-pedido").val(0);
+      });
+
+      $("form").submit(function(e){
+        e.preventDefault();
+
+        for(let i=0;i<itensPedido.length; i++)
+        {
+            delete itensPedido[i].id_item_pedido;
+            delete itensPedido[i].codigo_produto;
+            delete itensPedido[i].descricao;
+            delete itensPedido[i].custo_unitario;
+            delete itensPedido[i].custo_unitario_original;
+
+            item = {
+                'id_pedido': parseInt(itensPedido[i].id_pedido),
+                'id_produto': parseInt(itensPedido[i].id_produto),
+                'quantidade': itensPedido[i].quantidade,
+                'custo_total': itensPedido[i].custo_total
+            }
+
+            itensPedidoEnvio.push(JSON.stringify(item));
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "{{ request.path }}",
+            contentType: 'application/json',
+            data: JSON.stringify(itensPedidoEnvio),
+            success: function(data){
+                console.log(data);
+                window.location.href = "{{ request.path }}";
+            },
+            error: function(data){
+                console.log(data);
+            }
+        });
+      });
+  });
+</script>
+{% endblock %}
