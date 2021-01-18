@@ -64,15 +64,14 @@
 {% block custom-scripts %}
 <script>
   let itensPedido = [];
-  let itensPedidoEnvio = [];
 
   let mandarEdicaoItem = (index) => {
-       $("#produto-pedido").val(itensPedido[index].id_produto);
+       $("#produto-pedido").val(itensPedido[index].id_produto_id);
        $("#quantidade-produto-pedido").val(itensPedido[index].quantidade);
-       $("#preco-original-produto-pedido").val(itensPedido[index].custo_unitario_original);
-       $("#preco-venda-produto-pedido").val(itensPedido[index].custo_unitario);
+       $("#preco-original-produto-pedido").val(itensPedido[index].id_produto__custo_unitario);
+       $("#preco-venda-produto-pedido").val(itensPedido[index].id_produto__custo_unitario);
 
-       itensPedido.splice(index, 1);
+       $("#adiciona-item-pedido").attr("data-index", index);
   }
 
   let removerDaLista = (index) => {
@@ -90,10 +89,10 @@
             $.each(itensPedido, (index, item) => {
                 buffer+= `
                     <li class="list-group-item">
-                        <p>Código do produto: <span id="item-codigo-produto" class="font-weight-bold">${item.codigo_produto}</span></p>
-                        <p>Descrição: <span id="item-descricao-produto" class="font-weight-bold">${item.descricao}</span></p>
+                        <p>Código do produto: <span id="item-codigo-produto" class="font-weight-bold">${item.id_produto__codigo_produto}</span></p>
+                        <p>Descrição: <span id="item-descricao-produto" class="font-weight-bold">${item.id_produto__descricao}</span></p>
                         <p>Quantidade: <span id="item-quantidade" class="font-weight-bold">${item.quantidade}</span></p>
-                        <p>Valor unitario: <span id="item-preco-produto" class="font-weight-bold">${String(item.custo_unitario).replace(".",",")}</span></p>
+                        <p>Valor unitario: <span id="item-preco-produto" class="font-weight-bold">${String(item.id_produto__custo_unitario).replace(".",",")}</span></p>
                         <p>Valor total: <span id="item-valor-total" class="font-weight-bold">${String(item.custo_total).replace(".",",")}</span></p>
                         <p>
                             <button type="button" onclick="mandarEdicaoItem(${index})" class="btn btn-success text-white">Editar</button>
@@ -113,22 +112,20 @@
   }
 
   $(document).ready(function(){
-      {% if itens %}
-        {% for item in itens %}
-            itensPedido.push({
-                'id_pedido': "{{ item.id_pedido.id_pedido }}",
-                'id_produto': "{{ item.id_produto.id_produto }}",
-                'codigo_produto': "{{ item.id_produto.codigo_produto }}",
-                'descricao': "{{ item.id_produto.descricao }}",
-                'quantidade': "{{ item.quantidade }}",
-                'custo_unitario': "{{ item.id_produto.custo_unitario }}",
-                'custo_unitario_original': "{{ item.id_produto.custo_unitario }}",
-                'custo_total': "{{ item.custo_total }}"
-            });
-        {% endfor %}
+      $.ajax({
+        type: "POST",
+        url: "{% url 'retorna-informacoes-itens-pedido' id %}",
+        contentType: 'application/json',
+        async: false,
+        success: function(data){
+            itensPedido = data.itens_pedido;
+        },
+        error: function(data){
+            console.log(data);
+        }
+      });
 
-        atualizaExibeItensPedido();
-      {% endif %}
+      atualizaExibeItensPedido();
 
       $("#produto-pedido").change(function(){
          let custo_unitario = $("#produto-pedido option:selected").data("preco-total");
@@ -146,26 +143,33 @@
          let quantidade_ponto = quantidade.replace(",",".");
          quantidade_ponto = parseFloat(quantidade_ponto);
          let codigo_produto = $("#produto-pedido option:selected").data("codigo");
-         let custo_unitario_original = $("#preco-original-produto-pedido").val();
          let custo_unitario = $("#preco-venda-produto-pedido").val();
          let custo_unitario_ponto = custo_unitario.replace(",",".");
          custo_unitario_ponto = parseFloat(custo_unitario_ponto);
 
          let item = {
             'id_item_pedido': 0,
-            'id_pedido': "{{ pedido.id_pedido }}",
-            'id_produto': id_produto,
-            'codigo_produto': codigo_produto,
-            'descricao': descricao,
+            'id_pedido_id': "{{ pedido.id_pedido }}",
+            'id_produto_id': id_produto,
+            'id_produto__codigo_produto': codigo_produto,
+            'id_produto__descricao': descricao,
             'quantidade': quantidade_ponto,
-            'custo_unitario': custo_unitario_ponto,
-            'custo_unitario_original': custo_unitario_original,
+            'id_produto__custo_unitario': custo_unitario_ponto,
             'custo_total': parseFloat(custo_unitario_ponto * quantidade_ponto)
          }
 
-         itensPedido.push(item);
+         let data_index = $("#adiciona-item-pedido").attr("data-index");
 
-         atualizaExibeItensPedido();
+         if(typeof data_index !== typeof undefined && data_index !== false) {
+            itensPedido[data_index] = item;
+
+            atualizaExibeItensPedido();
+         }
+         else {
+            itensPedido.push(item);
+
+            atualizaExibeItensPedido();
+         }
 
          $("#produto-pedido").val(0);
          $("#quantidade-produto-pedido").val("");
@@ -176,31 +180,12 @@
       $("form").submit(function(e){
         e.preventDefault();
 
-        for(let i=0;i<itensPedido.length; i++)
-        {
-            delete itensPedido[i].id_item_pedido;
-            delete itensPedido[i].codigo_produto;
-            delete itensPedido[i].descricao;
-            delete itensPedido[i].custo_unitario;
-            delete itensPedido[i].custo_unitario_original;
-
-            item = {
-                'id_pedido': parseInt(itensPedido[i].id_pedido),
-                'id_produto': parseInt(itensPedido[i].id_produto),
-                'quantidade': itensPedido[i].quantidade,
-                'custo_total': itensPedido[i].custo_total
-            }
-
-            itensPedidoEnvio.push(JSON.stringify(item));
-        }
-
         $.ajax({
             type: "POST",
             url: "{{ request.path }}",
             contentType: 'application/json',
-            data: JSON.stringify(itensPedidoEnvio),
+            data: JSON.stringify(itensPedido),
             success: function(data){
-                console.log(data);
                 window.location.href = "{{ request.path }}";
             },
             error: function(data){

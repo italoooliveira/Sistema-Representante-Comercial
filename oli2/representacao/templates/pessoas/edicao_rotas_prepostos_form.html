@@ -13,7 +13,7 @@
                  </div>
                  <div class="form-group col-md-12">
                      <label class="font-weight-bold">Prepostos</label>
-                     {% render_field form.prepostos class="form-control" %}
+                     {% render_field form.prepostos id="prepostos-rota" class="form-control" %}
                  </div>
             </div>
             <div class="form-row">
@@ -29,4 +29,22 @@
 {% endblock %}
 {% block custom-scripts %}
     {% include 'pessoas/rotas_prepostos_js.html'%}
+    <script>
+        $(document).ready(function() {
+          $.ajax({
+            type: "POST",
+            url: "{% url 'retorna-informacoes-rota-prepostos' id_rota %}",
+            contentType: 'application/json',
+            async: false,
+            success: function(data){
+                prepostos = data.rota_prepostos_clientes.prepostos;
+            },
+            error: function(data){
+                console.log(data);
+            }
+          });
+
+          atualizaExibePrepostos();
+        });
+    </script>
 {% endblock %}

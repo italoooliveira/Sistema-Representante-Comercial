@@ -1,10 +1,10 @@
 {% extends 'partials/dashboard.html' %}
 {% load widget_tweaks %}
 {% block custom-css%}
-    {{ form.media.css }}
-    <style>
-        input, select {width: 100%}
-    </style>
+{{ form.media.css }}
+<style>
+    input, select {width: 100%}
+</style>
 {% endblock %}
 {% block content %}
 <div class="container-fluid">
@@ -123,62 +123,62 @@
 </div>
 {% endblock %}
 {% block custom-scripts %}
-    {{ form.media.js }}
-    <script>
-        let mostraEscondeCampoMultiploVenda = function ()
-        {
+{{ form.media.js }}
+<script>
+    let mostraEscondeCampoMultiploVenda = function ()
+    {
+        let temMultiploVenda = $("#id_possui_multiplo_venda").is(":checked");
+
+        if(temMultiploVenda){
+            $("#campo-multiplo-produto")
+                .removeClass("d-none")
+                .addClass("form-group col-md-12");
+        }
+        else{
+            $("#campo-multiplo-produto")
+                .removeClass("form-group col-md-12")
+                .addClass("d-none");
+        }
+    }
+
+    let init = function(){
+        mostraEscondeCampoMultiploVenda();
+    }
+
+    $(document).ready(function(){
+        init();
+
+        $("input[type=file]").on("change", function() {
+            let fileName = $(this).val().split("\\").pop();
+
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+
+            mostraImagem();
+        });
+
+        $("#id_possui_multiplo_venda").change(function(){
+            mostraEscondeCampoMultiploVenda();
+        });
+
+        $("#id_custo_unitario").change(function(){
             let temMultiploVenda = $("#id_possui_multiplo_venda").is(":checked");
 
             if(temMultiploVenda){
-                $("#campo-multiplo-produto")
-                    .removeClass("d-none")
-                    .addClass("form-group col-md-12");
-            }
-            else{
-                $("#campo-multiplo-produto")
-                    .removeClass("form-group col-md-12")
-                    .addClass("d-none");
-            }
-        }
-
-        let init = function(){
-            mostraEscondeCampoMultiploVenda();
-        }
-
-        $(document).ready(function(){
-            init();
-
-            $("input[type=file]").on("change", function() {
-                let fileName = $(this).val().split("\\").pop();
-
-                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-
-                mostraImagem();
-            });
-
-            $("#id_possui_multiplo_venda").change(function(){
-                mostraEscondeCampoMultiploVenda();
-            });
-
-            $("#id_custo_unitario").change(function(){
-                let temMultiploVenda = $("#id_possui_multiplo_venda").is(":checked");
-
-                if(temMultiploVenda){
-                    let multiplo = $("#id_multiplo").val();
-                    let preco = $("#id_custo_unitario").val();
-                    $("#id_preco_total").val(preco * multiplo);
-                }
-                else {
-                    let preco = $("#id_custo_unitario").val();
-                    $("#id_preco_total").val(preco);
-                }
-            });
-
-            $("#id_multiplo").change(function(){
                 let multiplo = $("#id_multiplo").val();
                 let preco = $("#id_custo_unitario").val();
                 $("#id_preco_total").val(preco * multiplo);
-            });
+            }
+            else {
+                let preco = $("#id_custo_unitario").val();
+                $("#id_preco_total").val(preco);
+            }
         });
-    </script>
+
+        $("#id_multiplo").change(function(){
+            let multiplo = $("#id_multiplo").val();
+            let preco = $("#id_custo_unitario").val();
+            $("#id_preco_total").val(preco * multiplo);
+        });
+    });
+</script>
 {% endblock %}

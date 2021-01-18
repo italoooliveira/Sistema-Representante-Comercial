@@ -1,4 +1,9 @@
 oli2/oli2/__pycache__/*
 oli2/oli2/media/*
 oli2/oli2/settings.py
-oli2\representacao\__pycache__/*
+oli2/representacao/migrations/__pycache__/
+oli2/representacao/__pycache__/*
+oli2/representacao/models/__pycache__/
+oli2/representacao/views/__pycache__/
+oli2/representacao/forms/__pycache__/
+oli2/representacao/functions/__pycache__/

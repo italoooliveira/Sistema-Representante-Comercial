@@ -1,10 +1,10 @@
 {% extends 'partials/dashboard.html' %}
 {% load widget_tweaks %}
 {% block custom-css%}
-    {{ form.media.css }}
-    <style>
-        input, select {width: 100%}
-    </style>
+{{ form.media.css }}
+<style>
+    input, select {width: 100%}
+</style>
 {% endblock %}
 {% block content %}
 <div class="container-fluid">
@@ -63,53 +63,53 @@
 </div>
 {% endblock %}
 {% block custom-scripts %}
-    {{ form.media.js }}
-    <script>
-        let mostraEscondeCampoEmpresas = () => {
-            let possuiVinculoEmpresa = $("#id_possui_vinculo_empresa").is(":checked");
+{{ form.media.js }}
+<script>
+    let mostraEscondeCampoEmpresas = () => {
+        let possuiVinculoEmpresa = $("#id_possui_vinculo_empresa").is(":checked");
 
-            if(possuiVinculoEmpresa){
-                $("#campo-empresas")
-                    .removeClass("d-none")
-                    .addClass("form-row");
-            }
-            else{
-                $("#campo-empresas")
-                    .removeClass("form-row")
-                    .addClass("d-none");
-            }
+        if(possuiVinculoEmpresa){
+            $("#campo-empresas")
+                .removeClass("d-none")
+                .addClass("form-row");
         }
-
-        let mostraEscondeCampoClientes = () => {
-            let possuiVinculoCliente = $("#id_possui_vinculo_cliente").is(":checked");
-
-            if(possuiVinculoCliente){
-                $("#campo-clientes")
-                    .removeClass("d-none")
-                    .addClass("form-row");
-            }
-            else{
-                $("#campo-clientes")
-                    .removeClass("form-row")
-                    .addClass("d-none");
-            }
+        else{
+            $("#campo-empresas")
+                .removeClass("form-row")
+                .addClass("d-none");
         }
+    }
 
-        let init = () => {
+    let mostraEscondeCampoClientes = () => {
+        let possuiVinculoCliente = $("#id_possui_vinculo_cliente").is(":checked");
+
+        if(possuiVinculoCliente){
+            $("#campo-clientes")
+                .removeClass("d-none")
+                .addClass("form-row");
+        }
+        else{
+            $("#campo-clientes")
+                .removeClass("form-row")
+                .addClass("d-none");
+        }
+    }
+
+    let init = () => {
+        mostraEscondeCampoEmpresas();
+        mostraEscondeCampoClientes();
+    }
+
+    $(document).ready(function(){
+        init();
+
+        $("#id_possui_vinculo_empresa").change(function(){
             mostraEscondeCampoEmpresas();
-            mostraEscondeCampoClientes();
-        }
-
-        $(document).ready(function(){
-            init();
-
-            $("#id_possui_vinculo_empresa").change(function(){
-                mostraEscondeCampoEmpresas();
-            });
-
-            $("#id_possui_vinculo_cliente").change(function(){
-                mostraEscondeCampoClientes();
-            });
         });
-    </script>
+
+        $("#id_possui_vinculo_cliente").change(function(){
+            mostraEscondeCampoClientes();
+        });
+    });
+</script>
 {% endblock %}

@@ -1,0 +1,463 @@
+<script>
+  let prepostos = [];
+  let prepostosEnvio = [];
+  let empresas = [];
+
+  /* Clientes */
+
+  let editarCliente = (index, indexCliente) => {
+       let id_cliente = $("#clientes-preposto-"+index+" #row-"+(indexCliente+1)+" #cliente-preposto-"+index).val();
+       let frequencia = $("#clientes-preposto-"+index+" #row-"+(indexCliente+1)+" #frequencia-cliente-preposto-"+index).val();
+       let dias = {'s':false, 't':false, 'q':false, 'qi':false, 'sx':false, 'sa':false};
+
+       $('#clientes-preposto-'+index+' #row-'+(indexCliente+1)+' #dia-cliente-preposto-'+index+' input[name="dias[]"]').each(function(){
+          switch($(this).val()){
+            case 's':
+                dias.s = $(this).is(":checked");
+                break;
+            case 't':
+                dias.t = $(this).is(":checked");
+                break;
+            case 'q':
+                dias.q = $(this).is(":checked");
+                break;
+            case 'qi':
+                dias.qi = $(this).is(":checked");
+                break;
+            case 'sx':
+                dias.sx = $(this).is(":checked");
+                break;
+            case 'sa':
+                dias.sa = $(this).is(":checked");
+                break;
+          }
+       });
+
+       prepostos[index].clientes[indexCliente] = {
+           "id_cliente_id": id_cliente,
+           "frequencia": frequencia,
+           "s": dias.s,
+           "t": dias.t,
+           "q": dias.q,
+           "qi": dias.qi,
+           "sx": dias.sx,
+           "sa": dias.sa
+       };
+
+       $.each(prepostos[index].clientes, (indexCliente, cliente) => {
+            $("#clientes-preposto-"+index+" #row-"+(indexCliente+1)).remove();
+       });
+
+       atualizaExibeClientesPreposto(index);
+  }
+
+  let removerDaListaCliente = (index, indexCliente) => {
+       prepostos[index].clientes.splice(indexCliente, 1);
+
+       $("#clientes-preposto-"+index+" #row-"+(indexCliente+1)).remove();
+
+       atualizaExibeClientesPreposto(index);
+  }
+
+  let atualizaExibeTodosClientesPreposto = () => {
+        if(prepostos.length > 0){
+            $.each(prepostos, (index, preposto) => {
+                if(prepostos[index].clientes.length > 0 ){
+                    $.each(prepostos[index].clientes, (indexCliente, cliente) => {
+                        let html = `
+                        <div id="row-${indexCliente+1}" class="row">
+                            <div class="col-md-4 mb-3">
+                                 <select id="cliente-preposto-${index}" class="form-control">
+                                    {% for x,y in form.fields.clientes.choices %}
+                                    <option value="{{ x }}"{% if form.fields.gender.value == x %} selected{% endif %}>{{ y }}</option>
+                                    {% endfor %}
+                                 <select>
+                            </div>
+                            <div class="col-md-4 mb-3" id="dia-cliente-preposto-${index}">
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" name="dias[]" value="s" />
+                                    <label class="form-check-label ml-2">S</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" name="dias[]" value="t" />
+                                    <label class="form-check-label ml-2">T</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" name="dias[]" value="q" />
+                                    <label class="form-check-label ml-2">Q</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" name="dias[]" value="qi" />
+                                    <label class="form-check-label ml-2">Q</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" name="dias[]" value="sx" />
+                                    <label class="form-check-label ml-2">S</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" name="dias[]" value="sa" />
+                                    <label class="form-check-label ml-2">S</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                 <select id="frequencia-cliente-preposto-${index}" class="form-control">
+                                    {% for x,y in form.fields.frequencia.choices %}
+                                     <option value="{{ x }}"{% if form.fields.gender.value == x %} selected{% endif %}>{{ y }}</option>
+                                    {% endfor %}
+                                 <select>
+                            </div>
+                            <div class="d-flex mb-3">
+                                <p>
+                                    <button type="button" class="btn" onclick="editarCliente(${index}, ${indexCliente})"><span class="text-success">Salvar</span></button>
+                                    <button type="button" class="btn" onclick="removerDaListaCliente(${index}, ${indexCliente})"><span class="text-danger"><i class="fa fa-trash text-danger" aria-hidden="true"></i> Excluir</span></button>
+                                </p>
+                            </div>
+                        </div>`;
+
+                        $("#clientes-preposto-"+index).append(html);
+
+                        $("#clientes-preposto-"+index+" #row-"+(indexCliente+1)+" #cliente-preposto-"+index).val(cliente.id_cliente_id);
+                        $("#clientes-preposto-"+index+" #row-"+(indexCliente+1)+" #frequencia-cliente-preposto-"+index).val(cliente.frequencia);
+                        $('#clientes-preposto-'+index+' #row-'+(indexCliente+1)+' #dia-cliente-preposto-'+index+' input[name="dias[]"]').each(function(){
+                            switch($(this).val()){
+                                case 's':
+                                    $(this).prop("checked", cliente.s);
+                                    break;
+                                case 't':
+                                    $(this).prop("checked", cliente.t);
+                                    break;
+                                case 'q':
+                                    $(this).prop("checked", cliente.q);
+                                    break;
+                                case 'qi':
+                                    $(this).prop("checked", cliente.qi);
+                                    break;
+                                case 'sx':
+                                    $(this).prop("checked", cliente.sx);
+                                    break;
+                                case 'sa':
+                                    $(this).prop("checked", cliente.sa);
+                                    break;
+                            }
+                        });
+                    });
+                }
+            });
+        }
+  }
+
+  let atualizaExibeClientesPreposto = (index) => {
+        if(prepostos[index].clientes.length > 0 ){
+            $.each(prepostos[index].clientes, (indexCliente, cliente) => {
+                let html = `
+                <div id="row-${indexCliente+1}" class="row">
+                    <div class="col-md-4 mb-3">
+                         <select id="cliente-preposto-${index}" class="form-control">
+                            {% for x,y in form.fields.clientes.choices %}
+                            <option value="{{ x }}"{% if form.fields.gender.value == x %} selected{% endif %}>{{ y }}</option>
+                            {% endfor %}
+                         <select>
+                    </div>
+                    <div class="col-md-4 mb-3" id="dia-cliente-preposto-${index}">
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" name="dias[]" value="s" />
+                            <label class="form-check-label ml-2">S</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" name="dias[]" value="t" />
+                            <label class="form-check-label ml-2">T</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" name="dias[]" value="q" />
+                            <label class="form-check-label ml-2">Q</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" name="dias[]" value="qi" />
+                            <label class="form-check-label ml-2">Q</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" name="dias[]" value="sx" />
+                            <label class="form-check-label ml-2">S</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" name="dias[]" value="sa" />
+                            <label class="form-check-label ml-2">S</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                         <select id="frequencia-cliente-preposto-${index}" class="form-control">
+                            {% for x,y in form.fields.frequencia.choices %}
+                             <option value="{{ x }}"{% if form.fields.gender.value == x %} selected{% endif %}>{{ y }}</option>
+                            {% endfor %}
+                         <select>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <p>
+                            <button type="button" class="btn" onclick="editarCliente(${index}, ${indexCliente})"><span class="text-success">Salvar</span></button>
+                            <button type="button" class="btn" onclick="removerDaListaCliente(${index}, ${indexCliente})"><span class="text-danger"><i class="fa fa-trash text-danger" aria-hidden="true"></i> Excluir</span></button>
+                        </p>
+                    </div>
+                </div>`;
+
+                $("#clientes-preposto-"+index).append(html);
+
+                $("#clientes-preposto-"+index+" #row-"+(indexCliente+1)+" #cliente-preposto-"+index).val(cliente.id_cliente_id);
+                $("#clientes-preposto-"+index+" #row-"+(indexCliente+1)+" #frequencia-cliente-preposto-"+index).val(cliente.frequencia);
+                $('#clientes-preposto-'+index+' #row-'+(indexCliente+1)+' #dia-cliente-preposto-'+index+' input[name="dias[]"]').each(function(){
+                    switch($(this).val()){
+                        case 's':
+                            $(this).prop("checked", cliente.s);
+                            break;
+                        case 't':
+                            $(this).prop("checked", cliente.t);
+                            break;
+                        case 'q':
+                            $(this).prop("checked", cliente.q);
+                            break;
+                        case 'qi':
+                            $(this).prop("checked", cliente.qi);
+                            break;
+                        case 'sx':
+                            $(this).prop("checked", cliente.sx);
+                            break;
+                        case 'sa':
+                            $(this).prop("checked", cliente.sa);
+                            break;
+                    }
+                });
+            });
+        }
+  }
+
+  let adicionarClientePreposto = (index) => {
+       let id_cliente = $("#row-zero #cliente-preposto-"+index).val();
+       let frequencia = $("#row-zero #frequencia-cliente-preposto-"+index).val();
+       let dias = {'s':false, 't':false, 'q':false, 'qi':false, 'sx':false, 'sa':false};
+
+       $('#row-zero #dia-cliente-preposto-'+index+' input[name="dias[]"]').each(function(){
+          switch($(this).val()){
+            case 's':
+                dias.s = $(this).is(":checked");
+                break;
+            case 't':
+                dias.t = $(this).is(":checked");
+                break;
+            case 'q':
+                dias.q = $(this).is(":checked");
+                break;
+            case 'qi':
+                dias.qi = $(this).is(":checked");
+                break;
+            case 'sx':
+                dias.sx = $(this).is(":checked");
+                break;
+            case 'sa':
+                dias.sa = $(this).is(":checked");
+                break;
+          }
+       });
+
+       prepostos[index].clientes.push({
+           "id_cliente_id": id_cliente,
+           "frequencia": frequencia,
+           "s": dias.s,
+           "t": dias.t,
+           "q": dias.q,
+           "qi": dias.qi,
+           "sx": dias.sx,
+           "sa": dias.sa
+       });
+
+       $("#row-zero #cliente-preposto-"+index).val("");
+       $("#row-zero #frequencia-cliente-preposto-"+index).val("SEMANAL");
+       $('#dia-cliente-preposto-'+index+' input[name="dias[]"]:checked').each(function(i){
+            $(this).prop("checked", false);
+       });
+
+       $.each(prepostos[index].clientes, (indexCliente, cliente) => {
+            $("#clientes-preposto-"+index+" #row-"+(indexCliente+1)).remove();
+       });
+
+       atualizaExibeClientesPreposto(index);
+  }
+
+  /* Prepostos */
+
+  let mandarEdicaoPreposto = (index) => {
+       $("#prepostos-rota").val(prepostos[index].id_preposto);
+
+       $("#adiciona-preposto-rota").attr("data-index", index);
+  }
+
+  let removerDaListaPreposto = (index) => {
+       prepostos.splice(index, 1);
+
+       atualizaExibePrepostos();
+  }
+
+  let atualizaExibePrepostos = () => {
+       let buffer = "";
+
+       if(prepostos.length > 0){
+            $.each(prepostos, (index, preposto) => {
+                buffer+= `
+                    <div class="col-12">
+                         <div class="card shadow mb-4">
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <p><span id="nome-preposto" class="font-weight-bold">${preposto.nome_preposto}</span></p>
+                                        <div id="clientes-preposto-${index}">
+                                            <div id="row-zero" class="row">
+                                                <div class="col-md-4 mb-3">
+                                                     <select id="cliente-preposto-${index}" class="form-control">
+                                                        {% for x,y in form.fields.clientes.choices %}
+                                                         <option value="{{ x }}"{% if form.fields.gender.value == x %} selected{% endif %}>{{ y }}</option>
+                                                        {% endfor %}
+                                                     <select>
+                                                </div>
+                                                <div class="col-md-4 mb-3" id="dia-cliente-preposto-${index}">
+                                                    <div class="form-check form-check-inline">
+                                                        <input type="checkbox" name="dias[]" value="s" />
+                                                        <label class="form-check-label ml-2">S</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input type="checkbox" name="dias[]" value="t" />
+                                                        <label class="form-check-label ml-2">T</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input type="checkbox" name="dias[]" value="q" />
+                                                        <label class="form-check-label ml-2">Q</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input type="checkbox" name="dias[]" value="qi" />
+                                                        <label class="form-check-label ml-2">Q</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input type="checkbox" name="dias[]" value="sx" />
+                                                        <label class="form-check-label ml-2">S</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input type="checkbox" name="dias[]" value="sa" />
+                                                        <label class="form-check-label ml-2">S</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                     <select id="frequencia-cliente-preposto-${index}" class="form-control">
+                                                        {% for x,y in form.fields.frequencia.choices %}
+                                                         <option value="{{ x }}"{% if form.fields.gender.value == x %} selected{% endif %}>{{ y }}</option>
+                                                        {% endfor %}
+                                                     <select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p>
+                                            <button type="button" id="adiciona-cliente-preposto" onclick="adicionarClientePreposto(${index})" class="btn btn-secondary font-weight-bold">Adicionar Cliente</button>
+                                        </p>
+                                        <p>
+                                            <button type="button" onclick="mandarEdicaoPreposto(${index})" class="btn btn-success text-white">Editar</button>
+                                            <button type="button" onclick="removerDaListaPreposto(${index})" class="btn btn-danger text-white">Remover</button>
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                         </div>
+                    </div>`;
+
+                $("#prepostos").html("");
+                $("#prepostos").html(buffer);
+
+                atualizaExibeTodosClientesPreposto();
+            });
+       }
+       else{
+            buffer += `<li class="list-group-item"></li>`;
+
+            $("#prepostos").html("");
+            $("#prepostos-rota").html(buffer);
+            $("#card-prepostos").addClass("d-none");
+       }
+  }
+
+  $(document).ready(function(){
+      $("#adiciona-preposto-rota").click(function(e){
+         e.preventDefault();
+
+         let nome_preposto = $("#prepostos-rota option:selected").text();
+         let id_preposto = $("#prepostos-rota").val();
+
+         $.ajax({
+            type: "POST",
+            url: "{% url 'retorna-informacoes-preposto' %}",
+            contentType: 'application/json',
+            data: JSON.stringify(id_preposto),
+            success: function(data){
+                let resultados = data.prepostos_empresa;
+
+                $.each(data.prepostos_empresa, function(index, preposto_empresa) {
+                    empresas.push(preposto_empresa.empresas_id);
+                });
+            },
+            error: function(data){
+            }
+         });
+
+         preposto = {
+            'id_preposto': id_preposto,
+            'nome_preposto': nome_preposto,
+            'clientes': []
+         }
+
+         let data_index = $("#adiciona-preposto-rota").attr("data-index");
+
+         if(typeof data_index !== typeof undefined && data_index !== false) {
+            console.log(prepostos);
+
+            prepostos[data_index].id_preposto = preposto.id_preposto;
+            prepostos[data_index].nome_preposto = preposto.nome_preposto;
+
+            atualizaExibePrepostos();
+         }
+         else {
+            prepostos.push(preposto);
+
+            atualizaExibePrepostos();
+         }
+
+         $("#prepostos-rota").val("");
+      });
+
+      $("form").submit(function(e){
+        e.preventDefault();
+
+        let nome_rota = $("#id_nome_rota").val();
+
+        for(let i=0;i<prepostos.length; i++)
+        {
+            preposto = {
+                'id_preposto': parseInt(prepostos[i].id_preposto),
+                'clientes': prepostos[i].clientes
+            }
+
+            prepostosEnvio.push(JSON.stringify(preposto));
+        }
+
+        let rota = {
+            'nome_rota': nome_rota,
+            'prepostos': prepostosEnvio
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "{{ request.path }}",
+            contentType: 'application/json',
+            data: JSON.stringify(rota),
+            success: function(data){
+                window.location.href = "{{ request.path }}";
+            },
+            error: function(data){
+            }
+        });
+      });
+  });
+</script>
