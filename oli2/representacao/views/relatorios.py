@@ -161,9 +161,9 @@ def clientes_sem_pedido(request, template_name='relatorios/clientes_sem_pedido_f
         dfClientesSemPedidoComUltimoPedido = retorna_clientes_sem_pedidos_com_ultimo_pedido(dfClientesSemPedido, dfPedidosDataAnteriorInicial)
 
         clientes_sem_pedidos = dfClientesSemPedidoComUltimoPedido.T.to_dict().values()
-        paginator = Paginator(clientes_sem_pedidos, 15)
-        page = request.GET.get('page')
-        clientes_sem_pedidos_por_pagina = paginator.get_page(page)
+        #paginator = Paginator(clientes_sem_pedidos, 15)
+        #page = request.GET.get('page')
+        #clientes_sem_pedidos_por_pagina = paginator.get_page(page)
 
         #clientes_sem_pedido_list = dfClientesSemPedidoComUltimoPedido.values.tolist()
 
