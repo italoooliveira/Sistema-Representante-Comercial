@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='pedidos',
             name='data_entrega',
-            field=models.DateField(db_index=True),
+            field=models.DateField(db_index=True, default=datetime.date(2021, 1, 28)),
         ),
         migrations.AlterField(
             model_name='pedidos',
