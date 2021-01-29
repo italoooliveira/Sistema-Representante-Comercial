@@ -59,8 +59,8 @@ def editar_acompanhamento(request, id_acompanhamento ,template_name='relatorios/
     tendencia_de_faturamento = (total_faturado_ate / acompanhamento.dias_trabalhados) * acompanhamento.dias_uteis
     faturamento_diario_necessario = (acompanhamento.meta_geral - total_faturado_ate) / (acompanhamento.dias_uteis - acompanhamento.dias_trabalhados)
 
-    fig = plt.figure(figsize=(8, 4))
-    plt.bar(['Total faturado até o momento(R$)','Tendência de faturamento final(R$)','Meta Geral(R$)'], [total_faturado_ate, tendencia_de_faturamento, acompanhamento.meta_geral], width=0.2, color=['green','red', 'blue'], align='center')
+    grafico1 = plt.figure(figsize=(8, 4))
+    plt.bar(['Total faturado até o momento(R$)','Tendência de faturamento final(R$)','Meta Geral(R$)'], [total_faturado_ate, tendencia_de_faturamento, acompanhamento.meta_geral], width=0.2, color=['yellow','green', 'green'], align='center')
     plt.grid(color='#95a5a6', linestyle='--', linewidth=2, axis='y', alpha=0.7)
     buffer = BytesIO()
     plt.savefig(buffer, format='png')
@@ -70,8 +70,8 @@ def editar_acompanhamento(request, id_acompanhamento ,template_name='relatorios/
     tendencia = base64.b64encode(image_png)
     tendencia = tendencia.decode('utf-8')
 
-    fig2 = plt.figure(figsize=(8, 4))
-    plt.bar(['Total faturado até o momento(%)','Tendência de faturamento final(%)','Meta Geral(%)'], [percentual_da_meta_ate, (tendencia_de_faturamento/(acompanhamento.meta_geral/100)), 100], width=0.2, color=['green','red', 'blue'], align='center')
+    grafico2 = plt.figure(figsize=(8, 4))
+    plt.bar(['Total faturado até o momento(%)','Tendência de faturamento final(%)','Meta Geral(%)'], [percentual_da_meta_ate, (tendencia_de_faturamento/(acompanhamento.meta_geral/100)), 100], width=0.2, color=['yellow','green', 'green'], align='center')
     plt.grid(color='#95a5a6', linestyle='--', linewidth=2, axis='y', alpha=0.7)
     buffer = BytesIO()
     plt.savefig(buffer, format='png')
@@ -145,35 +145,25 @@ def clientes_sem_pedido(request, template_name='relatorios/clientes_sem_pedido_f
 
     clientes_sem_pedidos = []
 
-    if 'data_inicial' in request.GET and 'data_final' in request.GET:
-        data_inicial = request.GET['data_inicial']
-        data_inicial = datetime.strptime(data_inicial, '%d/%m/%Y').strftime('%Y-%m-%d')
-        data_final = request.GET['data_final']
-        data_final = datetime.strptime(data_final, '%d/%m/%Y').strftime('%Y-%m-%d')
+    if (listaPedidos):
+        if 'data_inicial' in request.GET and 'data_final' in request.GET:
+            data_inicial = request.GET['data_inicial']
+            data_inicial = datetime.strptime(data_inicial, '%d/%m/%Y').strftime('%Y-%m-%d')
+            data_final = request.GET['data_final']
+            data_final = datetime.strptime(data_final, '%d/%m/%Y').strftime('%Y-%m-%d')
 
-        dfClientes = pd.DataFrame(listaClientes)
-        dfPedidos = pd.DataFrame(listaPedidos)
-        dfPedidos['data_pedido'] = pd.to_datetime(dfPedidos['data_pedido'])
+            dfClientes = pd.DataFrame(listaClientes)
+            dfPedidos = pd.DataFrame(listaPedidos)
+            dfPedidos['data_pedido'] = pd.to_datetime(dfPedidos['data_pedido'])
 
-        dfPedidosIntervalo = dfPedidos.loc[(dfPedidos.data_pedido >= data_inicial) & (dfPedidos.data_pedido <= data_final)]
-        dfPedidosDataAnteriorInicial = dfPedidos.loc[dfPedidos.data_pedido < data_inicial]
-        dfClientesSemPedido = dfClientes[~dfClientes['id_cliente'].isin(dfPedidosIntervalo['id_empresa_cliente_id'])]
-        dfClientesSemPedidoComUltimoPedido = retorna_clientes_sem_pedidos_com_ultimo_pedido(dfClientesSemPedido, dfPedidosDataAnteriorInicial)
+            dfPedidosIntervalo = dfPedidos.loc[(dfPedidos.data_pedido >= data_inicial) & (dfPedidos.data_pedido <= data_final)]
+            dfPedidosDataAnteriorInicial = dfPedidos.loc[dfPedidos.data_pedido < data_inicial]
+            dfClientesSemPedido = dfClientes[~dfClientes['id_cliente'].isin(dfPedidosIntervalo['id_empresa_cliente_id'])]
+            dfClientesSemPedidoComUltimoPedido = retorna_clientes_sem_pedidos_com_ultimo_pedido(dfClientesSemPedido, dfPedidosDataAnteriorInicial)
 
-        clientes_sem_pedidos = dfClientesSemPedidoComUltimoPedido.T.to_dict().values()
-        #paginator = Paginator(clientes_sem_pedidos, 15)
-        #page = request.GET.get('page')
-        #clientes_sem_pedidos_por_pagina = paginator.get_page(page)
-
-        #clientes_sem_pedido_list = dfClientesSemPedidoComUltimoPedido.values.tolist()
-
-        '''
-        for item in clientes_sem_pedido_list:
-            if item[1] != "":
-                clientes_sem_pedido.append({'nome_fantasia': item[1], 'data_ultimo_pedido': item[-1]})
-            else:
-                clientes_sem_pedidos.append({'nome_fantasia': item[2], 'data_ultimo_pedido': item[-1]})
-        '''
+            clientes_sem_pedidos = dfClientesSemPedidoComUltimoPedido.T.to_dict().values()
+    else:
+        clientes_sem_pedidos = listaPedidos
     return render(request, template_name, {'form': form, 'clientes_sem_pedidos': clientes_sem_pedidos})
 
 
@@ -221,28 +211,6 @@ def cancelamento_pedidos_por_cliente(request, template_name='relatorios/cancelam
             dfClientesPedidosSomas = retorna_resultado_pedidos_cancelados(dfClientesPedidosSomas, dfPedidosNaoCancelados, dfPedidosCancelados)
 
             clientes_pedidos_somas = dfClientesPedidosSomas.T.to_dict().values()
-
-            '''
-            for item in clientes_pedidos_somas_list:
-                if (item[1] != ""):
-                    clientes_pedidos_somas.append(
-                        {
-                            'nome_fantasia': item[1],
-                            'pedidos_feitos': int(item[-1]),
-                            'pedidos_cancelados': int(item[-2]),
-                            'pedidos_nao_cancelados': int(item[-3]),
-                        }
-                    )
-                else:
-                    clientes_pedidos_somas.append(
-                        {
-                            'nome_fantasia': item[2],
-                            'pedidos_feitos': int(item[-1]),
-                            'pedidos_cancelados': int(item[-2]),
-                            'pedidos_nao_cancelados': int(item[-3]),
-                        }
-                    )
-            '''
         else:
             clientes_pedidos_somas = listaPedidos
 

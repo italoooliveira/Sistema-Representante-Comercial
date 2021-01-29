@@ -104,7 +104,7 @@
                     {% render_field form.email_nfe class="form-control" placeholder="Ex: nfe@reentregas.com.br" %}
                 </div>
             </div>
-             <div class="form-row">
+            <div class="form-row">
                 <div id="campo-pedido-minimo" class="d-none">
                     <label class="font-weight-bold">Pedido mínimo</label>
                     {% render_field form.pedido_minimo class="form-control" %}
@@ -112,6 +112,12 @@
                 <div id="campo-horario-pedido" class="d-none">
                     <label class="font-weight-bold">Horário pedido</label>
                     {% render_field form.horario_pedido class="form-control" %}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label class="font-weight-bold">Observação</label>
+                    {% render_field form.observacao class="form-control" %}
                 </div>
             </div>
         </form>

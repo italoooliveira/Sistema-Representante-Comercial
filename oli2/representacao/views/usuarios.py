@@ -48,10 +48,14 @@ def cadastrar_usuario(request, template_name='usuarios/usuario_form.html'):
         user.set_password(senha)
         user.save()
 
+        '''
         senha_bytes = senha.encode('ascii')
         senha_base64_bytes = base64.b64encode(senha_bytes)
         senha_base64_bytes = senha_base64_bytes.decode("ascii")
         usuario = Usuarios(nome=nome, email=email, senha=senha_base64_bytes, permissao=permissao, telefone=telefone, django_auth_user=user)
+        '''
+
+        usuario = Usuarios(nome=nome, email=email, senha=senha, permissao=permissao, telefone=telefone, django_auth_user=user)
         usuario.save()
 
         mensagem_cadastro_sucesso(request)
@@ -70,11 +74,14 @@ def cadastrar_usuario(request, template_name='usuarios/usuario_form.html'):
 @login_required
 def editar_usuario(request, id_usuario, template_name='usuarios/usuario_form.html'):
     usuario = get_object_or_404(Usuarios, pk=id_usuario)
+
+    '''
     base64_string = usuario.senha
     base64_bytes = base64_string.encode("ascii")
     senha_string_bytes = base64.b64decode(base64_bytes)
     senha_string = senha_string_bytes.decode("ascii")
     usuario.senha = senha_string
+    '''
 
     if request.method == "POST":
         email = request.POST['email']
@@ -86,10 +93,13 @@ def editar_usuario(request, id_usuario, template_name='usuarios/usuario_form.htm
         usuario.email = email
         permissao_original = usuario.permissao
         usuario.permissao = permissao
+        '''
         senha_bytes = senha.encode('ascii')
         senha_base64_bytes = base64.b64encode(senha_bytes)
         senha_base64_bytes = senha_base64_bytes.decode("ascii")
-        usuario.senha = senha_base64_bytes
+        '''
+
+        usuario.senha = senha
         usuario.nome = nome
         usuario.telefone = telefone
         usuario.save()
@@ -102,9 +112,9 @@ def editar_usuario(request, id_usuario, template_name='usuarios/usuario_form.htm
 
         if permissao != permissao_original and permissao == "PREPOSTO":
             preposto = Prepostos(id_usuario=usuario)
-            preposto.possui_vinculo_empresa = 0;
-            preposto.possui_vinculo_cliente = 0;
-            preposto.comissao = 0;
+            preposto.possui_vinculo_empresa = 0
+            preposto.possui_vinculo_cliente = 0
+            preposto.comissao = 0
             preposto.save()
 
         return redirect('usuarios')

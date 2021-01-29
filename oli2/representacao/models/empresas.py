@@ -64,11 +64,12 @@ class Empresas(models.Model):
     pedido_minimo = models.FloatField(null=True, blank=True)
     possui_horario_pedido = models.BooleanField()
     horario_pedido = models.TimeField(null=True, blank=True)
-    comissao = models.FloatField(null=True, blank=True)
+    comissao = models.DecimalField(default=0, null=True, blank=True, max_digits=5, decimal_places=2)
     banco_empresa = models.CharField(max_length=15, null=True, blank=True)
     agencia_empresa = models.CharField(max_length=30, null=True, blank=True)
     conta_empresa = models.CharField(max_length=30, null=True, blank=True)
     id_tipo_empresa = models.ForeignKey(TiposEmpresa, on_delete=models.PROTECT)
+    observacao = models.TextField(null=True, blank=True)
 
     def __str__(self):
         if self.nome_fantasia:

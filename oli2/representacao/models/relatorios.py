@@ -5,7 +5,7 @@ from django.db import models
 
 class Acompanhamentos(models.Model):
     id_acompanhamento = models.AutoField(primary_key=True)
-    meta_geral = models.FloatField()
+    meta_geral = models.DecimalField(max_digits=10, decimal_places=2)
     dias_uteis = models.IntegerField(default=1)
     data_inicial = models.DateField()
     data_final = models.DateField()

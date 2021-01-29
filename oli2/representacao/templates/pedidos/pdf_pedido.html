@@ -52,8 +52,9 @@
                         <h4>
                             <stroke>{{ minha_empresa.razao_social }}</stroke>
                         </h4>
-                        <h5>Pedido Nº {{ pedido.numero_pedido }}</h5>
-                        <h5>{{ pedido.data_pedido }}</h5>
+                        <h5>Ordem de compra: {% if pedido.ordem_compra %}{{ pedido.ordem_compra }}{% endif %}</h5>
+                        <h5>Data do pedido: {{ pedido.data_pedido }}</h5>
+                        <h5>Data de entrega: {{ pedido.data_entrega }}</h5>
                     </td>
                     <td colspan="2" class="bl-0">
                         {% if pedido.id_empresa_representada.logo %}
@@ -155,9 +156,9 @@
                     </td>
                     <td colspan="3" class="bl-0">
                         <h4>
-                            <stroke>E-mail:</stroke>
-                            {% if pedido.id_empresa_cliente.email %}
-                                {{ pedido.id_empresa_cliente.email }}
+                            <stroke>E-mail NFe:</stroke>
+                            {% if pedido.id_empresa_cliente.email_nfe %}
+                                {{ pedido.id_empresa_cliente.email_nfe }}
                             {% endif %}
                         </h4>
                     </td>

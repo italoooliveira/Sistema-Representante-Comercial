@@ -6,7 +6,7 @@ from django.db import models
 class Prepostos(models.Model):
     id_preposto = models.AutoField(primary_key=True)
     possui_vinculo_empresa = models.BooleanField()
-    comissao = models.FloatField(blank=True)
+    comissao = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
     id_usuario = models.ForeignKey(Usuarios, on_delete=models.PROTECT, null=True)
     empresa = models.ManyToManyField(Empresas, null=True, blank=True)
 

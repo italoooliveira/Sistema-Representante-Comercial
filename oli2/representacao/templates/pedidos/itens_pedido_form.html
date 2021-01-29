@@ -14,7 +14,6 @@
                     <p class="font-weight-bold">Pedido mínimo: <span class="text-danger">R$ {{ representada.pedido_minimo }}</span></p>
                     {% endif %}
                     <p class="font-weight-bold">Total do pedido: <span class="text-success">R$ {{ pedido.total_pedido }}</span></p>
-                    <!--<p class="font-weight-bold">Valor total do pedido: <span class="text-danger">R$ 00,00 </span></p>!-->
                 </div>
             </div>
             <div class="form-row mt-3">
@@ -23,7 +22,7 @@
                     <select id="produto-pedido" class="form-control">
                         <option value="0">---------</option>
                         {% for produto in produtos%}
-                            <option value="{{produto.id_produto}}" data-preco-total="{{produto.preco_total}}" data-codigo="{{produto.codigo_produto}}">
+                            <option value="{{produto.id_produto}}" data-preco-total="{{produto.preco_total}}" data-codigo="{{produto.codigo_produto}}" data-custo-unitario="{{produto.custo_unitario}}">
                                 {{produto.descricao}}
                             </option>
                         {% endfor %}
@@ -34,11 +33,11 @@
                     <input id="quantidade-produto-pedido" type="text" class="form-control"/>
                 </div>
                 <div class="form-group col-md-6">
-                    <label class="font-weight-bold">Preço original</label>
+                    <label class="font-weight-bold">Preço unitario</label>
                     <input id="preco-original-produto-pedido" type="text" class="form-control" disabled/>
                 </div>
-                  <div class="form-group col-md-6">
-                    <label class="font-weight-bold">Preço de venda</label>
+                <div class="form-group col-md-6">
+                    <label class="font-weight-bold">Preço total</label>
                     <input id="preco-venda-produto-pedido" type="text" class="form-control"/>
                 </div>
             </div>
@@ -128,10 +127,11 @@
       atualizaExibeItensPedido();
 
       $("#produto-pedido").change(function(){
-         let custo_unitario = $("#produto-pedido option:selected").data("preco-total");
+         let custo_unitario = $("#produto-pedido option:selected").data("custo-unitario");
+         let preco_total = $("#produto-pedido option:selected").data("preco-total");
 
          $("#preco-original-produto-pedido").val(custo_unitario);
-         $("#preco-venda-produto-pedido").val(custo_unitario);
+         $("#preco-venda-produto-pedido").val(preco_total);
       });
 
       $("#adiciona-item-pedido").click(function(e){

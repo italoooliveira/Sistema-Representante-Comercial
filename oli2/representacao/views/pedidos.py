@@ -88,7 +88,7 @@ def excluir_forma_pagamento(request, id_forma_pagamento):
 def listar_pedidos(request, template_name='pedidos/lista_pedidos.html'):
     form = PesquisaPedidoForm(request.GET or None)
 
-    listaPedido = Pedidos.objects.order_by('-data_pedido')
+    listaPedido = Pedidos.objects.order_by('-data_pedido', '-horario_pedido')
 
     if 'numero_pedido' in request.GET:
         numero_pedido = request.GET['numero_pedido']
@@ -148,7 +148,7 @@ def cadastrar_pedido(request, template_name='pedidos/pedido_form.html'):
     if form.is_valid():
         pedido = form.save()
 
-        mensagem_cadastro_sucesso(request)
+        #mensagem_cadastro_sucesso(request)
 
         return redirect('confirmar-itens-pedido', pedido.pk)
     return render(request, template_name, {'form': form})
