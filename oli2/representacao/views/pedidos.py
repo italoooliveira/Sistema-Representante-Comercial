@@ -189,7 +189,7 @@ def cadastrar_itens_pedido(request, id_pedido, template_name='pedidos/itens_pedi
         total_pedido = 0
 
         for item in items:
-            item_json = json.loads(item)
+            #item_json = json.loads(item)
 
             total_pedido = total_pedido + item_json['custo_total']
 
