@@ -188,14 +188,14 @@ def cadastrar_itens_pedido(request, id_pedido, template_name='pedidos/itens_pedi
 
         total_pedido = 0
 
-        for item in items:
+        for item_json in items:
             #item_json = json.loads(item)
 
             total_pedido = total_pedido + item_json['custo_total']
 
             item_pedido = ItensPedido(
                 id_pedido=pedido,
-                id_produto=get_object_or_404(Produtos, pk=item_json['id_produto']),
+                id_produto=get_object_or_404(Produtos, pk=item_json['id_produto_id']),
                 quantidade=item_json['quantidade'],
                 custo_total=item_json['custo_total']
             )
@@ -260,6 +260,8 @@ def editar_itens_pedido(request, id_pedido, template_name='pedidos/itens_pedido_
 
             pedido.total_pedido = total_pedido
             pedido.save()
+
+            mensagem_edicao_sucesso(request)
         return HttpResponse("Ok")
     else:
         return render(request, template_name, {

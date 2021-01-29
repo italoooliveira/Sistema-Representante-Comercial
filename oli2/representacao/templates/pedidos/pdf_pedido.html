@@ -45,7 +45,7 @@
                 <tr class="text-align-center">
                     <td colspan="2" class="br-0">
                         {% if minha_empresa.logo %}
-                            <img width="200" src="http://{{base_url}}{{ minha_empresa.logo.url }}">
+                            <img style="width:150px;" src="http://{{base_url}}{{ minha_empresa.logo.url }}">
                         {% endif %}
                     </td>
                     <td colspan="2" class="bl-0 br-0">
@@ -58,7 +58,7 @@
                     </td>
                     <td colspan="2" class="bl-0">
                         {% if pedido.id_empresa_representada.logo %}
-                            <img width="200" src="http://{{base_url}}{{ pedido.id_empresa_representada.logo.url }}">
+                            <img style="width:150px;" src="http://{{base_url}}{{ pedido.id_empresa_representada.logo.url }}">
                         {% endif %}
                     </td>
                 </tr>

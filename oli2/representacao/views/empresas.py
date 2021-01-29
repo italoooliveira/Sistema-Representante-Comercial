@@ -106,6 +106,9 @@ def editar_minha_empresa(request, id_minha_empresa, template_name='empresas/minh
 
         if form.is_valid():
             form.save()
+
+            mensagem_edicao_sucesso(request)
+
             return redirect('cadastrar-minha-empresa')
     else:
         form = MinhaEmpresaForm(instance=minha_empresa)
