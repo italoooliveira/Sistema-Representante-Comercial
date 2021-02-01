@@ -236,10 +236,10 @@ def listar_clientes(request, template_name='empresas/lista_clientes.html'):
             listaCliente = listaCliente.filter(Q(razao_social__icontains=razao_social))
 
     if 'nome_fantasia' in request.GET:
-        fantasia = request.GET['fantasia']
+        nome_fantasia = request.GET['nome_fantasia']
 
-        if fantasia:
-            listaCliente = listaCliente.filter(Q(nome_fantasia__icontains=fantasia))
+        if nome_fantasia:
+            listaCliente = listaCliente.filter(Q(nome_fantasia__icontains=nome_fantasia))
 
     if 'cnpj' in request.GET:
         cnpj = request.GET['cnpj']
