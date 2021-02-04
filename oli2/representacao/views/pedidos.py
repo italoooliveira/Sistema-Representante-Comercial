@@ -131,6 +131,12 @@ def listar_pedidos(request, template_name='pedidos/lista_pedidos.html'):
             usuario = get_object_or_404(Usuarios, pk=usuario_responsavel)
             listaPedido = listaPedido.filter(id_usuario=usuario)
 
+    if 'status_pedido' in request.GET:
+        status_pedido = request.GET['status_pedido']
+
+        if status_pedido:
+            listaPedido = listaPedido.filter(status=status_pedido)
+
     listaPedido = listaPedido.select_related('id_empresa_representada','id_empresa_cliente').all()
     paginator = Paginator(listaPedido, 15)
     page = request.GET.get('page')

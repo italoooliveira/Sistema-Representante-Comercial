@@ -154,7 +154,7 @@ def listar_empresas(request, template_name='empresas/lista_empresas.html'):
         tipo_empresa = request.GET['tipo_empresa']
 
         if tipo_empresa:
-            tipo=get_object_or_404(Empresas, pk=tipo_empresa)
+            tipo=get_object_or_404(TiposEmpresa, pk=tipo_empresa)
             listaEmpresa = listaEmpresa.filter(id_tipo_empresa=tipo)
 
     listaEmpresa = listaEmpresa.all().values(

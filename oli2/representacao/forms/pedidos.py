@@ -33,12 +33,20 @@ class PedidoForm(ModelForm):
 
 
 class PesquisaPedidoForm(forms.Form):
+    STATUS = (
+        ('', '---------'),
+        ('AGUARDANDO FATURAMENTO', 'AGUARDANDO FATURAMENTO'),
+        ('FATURADO', 'FATURADO'),
+        ('CANCELADO', 'CANCELADO')
+    )
+
     numero_pedido = forms.IntegerField(required=False)
     data_inicial_pedido = forms.DateField(required=False,widget=DatePicker())
     data_final_pedido = forms.DateField(required=False,widget=DatePicker())
     empresa_representada = forms.ModelChoiceField(required=False, queryset=Empresas.objects.none())
     empresa_cliente = forms.ModelChoiceField(required=False, queryset=Clientes.objects.none())
     usuario_responsavel = forms.ModelChoiceField(required=False, queryset=Usuarios.objects.none())
+    status_pedido = forms.ChoiceField(required=False, choices=STATUS)
 
     def __init__(self, *args, **kwargs):
         super(PesquisaPedidoForm, self).__init__(*args, **kwargs)
