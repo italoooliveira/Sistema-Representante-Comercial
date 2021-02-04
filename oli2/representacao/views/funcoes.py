@@ -1,4 +1,4 @@
-from django.contrib import auth, messages
+from django.contrib import messages
 
 
 def mensagem_edicao_sucesso(request):
