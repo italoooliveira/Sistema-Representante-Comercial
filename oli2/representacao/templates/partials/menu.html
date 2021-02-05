@@ -4,6 +4,7 @@
         <!--<img src="" width="130">!-->
         Oli 2
     </a>
+    {% if user.is_superuser %}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConfiguracoes" aria-expanded="true" aria-controls="collapseConfiguracoes">
             <i class="fa fa-cogs" aria-hidden="true"></i>
@@ -15,6 +16,7 @@
             </div>
         </div>
     </li>
+    {% endif %}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsuarios" aria-expanded="true" aria-controls="collapseUsuarios">
             <i class="fas fa-user-circle"></i>
@@ -23,7 +25,9 @@
         <div id="collapseUsuarios" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="py-2 collapse-inner rounded">
                 <a class="collapse-item" href="{% url 'usuarios' %}">Usuários</a>
+                {% if user.is_superuser %}
                 <a class="collapse-item" href="{% url 'cadastrar-usuario' %}">Cadastro de usuários</a>
+                {% endif %}
             </div>
         </div>
     </li>
@@ -50,9 +54,11 @@
         </a>
         <div id="collapsePessoas" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="py-2 collapse-inner rounded">
+                {% if user.is_superuser %}
                 <a class="collapse-item" href="{% url 'prepostos' %}">Prepostos</a>
                 <a class="collapse-item" href="{% url 'rotas-prepostos' %}">Rotas dos prepostos</a>
                 <a class="collapse-item" href="{% url 'cadastrar-rotas-prepostos' %}">Cadastro de rotas <br/>dos prepostos</a>
+                {% endif %}
                 <a class="collapse-item" href="{% url 'contatos' %}">Contatos</a>
                 <a class="collapse-item" href="{% url 'cadastrar-contato' %}">Cadastro de contatos</a>
             </div>
