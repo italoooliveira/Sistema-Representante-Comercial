@@ -12,7 +12,7 @@
                     {% render_field form.email class="form-control" placeholder="Ex: joao@gmail.com" %}
                 </div>
                 <div class="form-group col-md-3">
-                    <label class="font-weight-bold">Senha</label>
+                    <label class="font-weight-bold">{% if request.get_full_path == "/usuarios/cadastrar" %}Senha{% else %}Nova Senha{% endif %}</label>
                     {% render_field form.senha class="form-control" placeholder="Ex: @EmpresaX21" %}
                 </div>
                 <div class="form-group col-md-4">

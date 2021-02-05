@@ -12,5 +12,22 @@ class UsuarioForm(ModelForm):
         }
 
 
+class UsuarioFormCustom(forms.Form):
+    PERMISSOES = (
+        ('BASICA', 'BÁSICA'),
+        ('PREPOSTO', 'PREPOSTO'),
+        ('ADMINISTRADOR', 'ADMINISTRADOR'),
+    )
+
+    email = forms.CharField()
+    senha = forms.CharField(max_length=200, required=False, widget=forms.PasswordInput)
+    permissao = forms.ChoiceField(choices=PERMISSOES)
+    nome = forms.CharField(max_length=255)
+    telefone = forms.CharField(max_length=80, required=False)
+    widgets = {
+        'senha': forms.PasswordInput(render_value=False)
+    }
+
+
 class PesquisaUsuarioForm(forms.Form):
     nome = forms.CharField(required=False, max_length=255)
