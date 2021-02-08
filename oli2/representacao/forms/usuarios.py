@@ -24,9 +24,6 @@ class UsuarioFormCustom(forms.Form):
     permissao = forms.ChoiceField(choices=PERMISSOES)
     nome = forms.CharField(max_length=255)
     telefone = forms.CharField(max_length=80, required=False)
-    widgets = {
-        'senha': forms.PasswordInput(render_value=False)
-    }
 
 
 class PesquisaUsuarioForm(forms.Form):

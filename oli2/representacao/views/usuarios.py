@@ -46,7 +46,7 @@ def cadastrar_usuario(request, template_name='usuarios/usuario_form.html'):
         user = User.objects.create_user(username=nome, email=email)
         user.set_password(senha)
 
-        if (permissao == "ADMINISTRADOR"):
+        if permissao == "ADMINISTRADOR":
             user.is_superuser = True
 
         user.save()
@@ -90,10 +90,10 @@ def editar_usuario(request, id_usuario, template_name='usuarios/usuario_form.htm
         user.username = nome
         user.email = email
 
-        if (senha != ""):
+        if senha:
             user.set_password(senha)
 
-        if (usuario.permissao == "ADMINISTRADOR"):
+        if usuario.permissao == "ADMINISTRADOR":
             user.is_superuser = True
 
         user.save()
