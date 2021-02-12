@@ -23,7 +23,7 @@ class Pedidos(models.Model):
     )
 
     id_pedido = models.AutoField(primary_key=True)
-    numero_pedido = models.CharField(max_length=50, null=True, blank=True, db_index=True)
+    numero_pedido = models.CharField(max_length=50, null=True, db_index=True)
     observacao = models.TextField(null=True, blank=True)
     total_pedido = models.FloatField(default=0, blank=True)
     data_pedido = models.DateField(default=datetime.now().date(), null=False, blank=False, db_index=True)

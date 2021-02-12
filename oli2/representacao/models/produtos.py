@@ -28,8 +28,8 @@ class TiposEmbalagem(models.Model):
 
 class Produtos(models.Model):
     id_produto = models.AutoField(primary_key=True)
-    codigo_produto = models.CharField(max_length=150, null=True, blank=True, db_index=True)
-    descricao = models.CharField(max_length=255, null=True, blank=True, db_index=True)
+    codigo_produto = models.CharField(max_length=150, null=True, db_index=True)
+    descricao = models.CharField(max_length=255, null=True, db_index=True)
     custo_unitario = models.DecimalField(default=0, blank=True, max_digits=10, decimal_places=2)
     comissao = models.DecimalField(default=0, blank=True, max_digits=5, decimal_places=2)
     ipi = models.FloatField(default=0, null=True, blank=True)
