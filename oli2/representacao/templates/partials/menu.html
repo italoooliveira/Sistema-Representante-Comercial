@@ -28,6 +28,10 @@
                 {% if user.is_superuser %}
                 <a class="collapse-item" href="{% url 'cadastrar-usuario' %}">Cadastro de usuários</a>
                 {% endif %}
+                <a class="collapse-item" href="{% url 'tarefas' user.id %}">Tarefa</a>
+                {% if user.is_superuser %}
+                <a class="collapse-item" href="{% url 'cadastrar-tarefa' %}">Cadastro de tarefas</a>
+                {% endif %}
             </div>
         </div>
     </li>

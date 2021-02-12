@@ -130,4 +130,129 @@ def excluir_usuario(request, id_usuario):
         return redirect('usuarios')
 
 
-# Usuários #
+# Tarefas #
+
+@login_required
+def listar_tarefas(request, id_user=None, template_name="usuarios/lista_tarefas.html"):
+    form = PesquisaTarefaForm(request.GET or None)
+    listaTarefas = Tarefas.objects.order_by('id_tarefa')
+
+    if 'descricao_tarefa' in request.GET:
+        descricao_tarefa = request.GET['descricao_tarefa']
+
+        if descricao_tarefa:
+            listaTarefas = listaTarefas.filter(Q(descricao_tarefa__icontains = descricao_tarefa))
+
+    if 'data_inicial' in request.GET:
+        data_inicial = request.GET['data_inicial']
+
+        if data_inicial:
+            data_inicial = datetime.strptime(data_inicial, '%d/%m/%Y').strftime('%Y-%m-%d')
+            listaTarefas = listaTarefas.filter(data_inicial__gte = data_inicial)
+
+    if 'data_final' in request.GET:
+        data_final = request.GET['data_final']
+
+        if data_final:
+            data_final = datetime.strptime(data_final, '%d/%m/%Y').strftime('%Y-%m-%d')
+            listaTarefas = listaTarefas.filter(data_final__lte = data_final)
+
+    if 'status' in request.GET:
+        status = request.GET['status']
+
+        if status:
+            listaTarefas = listaTarefas.filter(status=status)
+
+    if 'minhas_tarefas' in request.GET:
+        id_usuario = Usuarios.objects.get(id_usuario=id_user)
+        listaTarefas = listaTarefas.filter(usuario__in=[id_usuario])
+
+    listaTarefas = listaTarefas.all().values('id_tarefa', 'descricao_tarefa', 'data_inicial', 'data_final', 'status')
+    paginator = Paginator(listaTarefas, 15)
+    page = request.GET.get('page')
+    tarefas_por_pagina = paginator.get_page(page)
+
+    data = {'tarefas': tarefas_por_pagina, 'form': form}
+
+    return render(request, template_name, data)
+
+
+@login_required
+def cadastrar_tarefa(request, template_name="usuarios/tarefas_form.html"):
+    form = TarefaForm(request.POST or None)
+
+    if request.method == "POST":
+        if form.is_valid():
+            new = form.save(commit=False)
+            new.save()
+            form.save_m2m()
+
+            mensagem_cadastro_sucesso(request)
+
+            return redirect('cadastrar-tarefa')
+    return render(request, template_name, {'form': form})
+
+
+@login_required
+def editar_tarefa(request, id_tarefa, template_name="usuarios/tarefas_form.html"):
+    tarefa = get_object_or_404(Tarefas, pk=id_tarefa)
+
+    if request.method == "POST":
+        form = TarefaForm(request.POST, instance=tarefa)
+
+        if form.is_valid():
+            form.save()
+            return redirect('tarefas')
+    else:
+        form = TarefaForm(instance=tarefa)
+    return render(request, template_name, {'form': form })
+
+@login_required
+def excluir_tarefa(request, id_tarefa):
+    tarefa = get_object_or_404(Tarefas, pk=id_tarefa)
+
+    if request.method == "GET":
+        tarefa.delete()
+        return redirect('tarefas')
+
+def minhas_tarefas(request, id_user, template_name="usuarios/lista_tarefas.html"):
+    form = PesquisaTarefaForm(request.GET or None)
+
+    listaTarefas = Tarefas.objects.order_by('id_tarefa')
+    id_usuario = Usuarios.objects.get(id_usuario=id_user)
+    listaTarefas = listaTarefas.filter(usuario__in=[id_usuario])
+
+    if 'descricao_tarefa' in request.GET:
+        descricao_tarefa = request.GET['descricao_tarefa']
+
+        if descricao_tarefa:
+            listaTarefas = listaTarefas.filter(Q(descricao_tarefa__icontains = descricao_tarefa))
+
+    if 'data_inicial' in request.GET:
+        data_inicial = request.GET['data_inicial']
+
+        if data_inicial:
+            data_inicial = datetime.strptime(data_inicial, '%d/%m/%Y').strftime('%Y-%m-%d')
+            listaTarefas = listaTarefas.filter(data_inicial__gte = data_inicial)
+
+    if 'data_final' in request.GET:
+        data_final = request.GET['data_final']
+
+        if data_final:
+            data_final = datetime.strptime(data_final, '%d/%m/%Y').strftime('%Y-%m-%d')
+            listaTarefas = listaTarefas.filter(data_final__lte = data_final)
+
+    if 'status' in request.GET:
+        status = request.GET['status']
+
+        if status:
+            listaTarefas = listaTarefas.filter(status=status)
+
+    paginator = Paginator(listaTarefas, 15)
+    page = request.GET.get('page')
+    tarefas_por_pagina = paginator.get_page(page)
+
+    data = {'tarefas': tarefas_por_pagina, 'form': form}
+
+    return render(request, template_name, data)
+
