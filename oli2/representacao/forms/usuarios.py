@@ -37,7 +37,6 @@ class TarefaForm(ModelForm):
         model = Tarefas
         fields = '__all__'
         widgets = {
-            'senha': forms.PasswordInput(render_value=True),
             'data_inicial': DatePicker(
                 options={
                     "useCurrent": True,

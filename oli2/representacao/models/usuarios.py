@@ -42,7 +42,7 @@ class Tarefas(models.Model):
     usuario = models.ManyToManyField(Usuarios, blank=True)
     descricao_tarefa = models.CharField(db_index=True, max_length=255)
     data_inicial = models.DateField(default=datetime.now().date(), db_index=True)
-    data_final = models.DateField(default=datetime.now().date(), null=True, blank=True)
+    data_final = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=30, choices=STATUS, default='A FAZER', db_index=True)
     observacao = models.TextField(null=True, blank=True)
     frequencia = models.CharField(max_length=30, choices=FREQUENCIA, null=True, blank=True)

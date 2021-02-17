@@ -133,9 +133,10 @@ def excluir_usuario(request, id_usuario):
 # Tarefas #
 
 @login_required
-def listar_tarefas(request, id_user=None, template_name="usuarios/lista_tarefas.html"):
+def listar_tarefas(request, template_name="usuarios/lista_tarefas.html"):
     form = PesquisaTarefaForm(request.GET or None)
     listaTarefas = Tarefas.objects.order_by('id_tarefa')
+    id_user = request.user.id
 
     if 'descricao_tarefa' in request.GET:
         descricao_tarefa = request.GET['descricao_tarefa']
@@ -214,45 +215,4 @@ def excluir_tarefa(request, id_tarefa):
     if request.method == "GET":
         tarefa.delete()
         return redirect('tarefas')
-
-def minhas_tarefas(request, id_user, template_name="usuarios/lista_tarefas.html"):
-    form = PesquisaTarefaForm(request.GET or None)
-
-    listaTarefas = Tarefas.objects.order_by('id_tarefa')
-    id_usuario = Usuarios.objects.get(id_usuario=id_user)
-    listaTarefas = listaTarefas.filter(usuario__in=[id_usuario])
-
-    if 'descricao_tarefa' in request.GET:
-        descricao_tarefa = request.GET['descricao_tarefa']
-
-        if descricao_tarefa:
-            listaTarefas = listaTarefas.filter(Q(descricao_tarefa__icontains = descricao_tarefa))
-
-    if 'data_inicial' in request.GET:
-        data_inicial = request.GET['data_inicial']
-
-        if data_inicial:
-            data_inicial = datetime.strptime(data_inicial, '%d/%m/%Y').strftime('%Y-%m-%d')
-            listaTarefas = listaTarefas.filter(data_inicial__gte = data_inicial)
-
-    if 'data_final' in request.GET:
-        data_final = request.GET['data_final']
-
-        if data_final:
-            data_final = datetime.strptime(data_final, '%d/%m/%Y').strftime('%Y-%m-%d')
-            listaTarefas = listaTarefas.filter(data_final__lte = data_final)
-
-    if 'status' in request.GET:
-        status = request.GET['status']
-
-        if status:
-            listaTarefas = listaTarefas.filter(status=status)
-
-    paginator = Paginator(listaTarefas, 15)
-    page = request.GET.get('page')
-    tarefas_por_pagina = paginator.get_page(page)
-
-    data = {'tarefas': tarefas_por_pagina, 'form': form}
-
-    return render(request, template_name, data)
 
