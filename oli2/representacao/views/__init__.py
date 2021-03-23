@@ -3,6 +3,7 @@ from .empresas import *
 from .pessoas import *
 from .produtos import *
 from .pedidos import *
+from .configuracoes import *
 from .relatorios import *
 
 

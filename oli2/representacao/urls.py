@@ -79,5 +79,6 @@ urlpatterns = [
     path('tarefas', views.listar_tarefas, name='tarefas'),
     path('tarefas/cadastrar', views.cadastrar_tarefa, name='cadastrar-tarefa'),
     path('editar/tarefa/<int:id_tarefa>', views.editar_tarefa, name="editar-tarefa"),
-    path('excluir/tarefa<int:id_tarefa>', views.excluir_tarefa, name="excluir-tarefa")
+    path('excluir/tarefa<int:id_tarefa>', views.excluir_tarefa, name="excluir-tarefa"),
+    path('configuracoes/pedidos', views.configuracoes_pedidos, name="configuracoes-pedidos")
 ]

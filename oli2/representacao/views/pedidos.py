@@ -7,6 +7,7 @@ from django.http import HttpResponse, JsonResponse
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
 from .funcoes import *
 import json
 
@@ -150,13 +151,21 @@ def listar_pedidos(request, template_name='pedidos/lista_pedidos.html'):
 @login_required
 def cadastrar_pedido(request, template_name='pedidos/pedido_form.html'):
     form = PedidoForm(request.POST or None)
+    pe02 = get_object_or_404(Configuracoes, pk=2)
 
-    if form.is_valid():
-        pedido = form.save()
+    form.fields['numero_pedido'].initial = pe02.valor
 
-        #mensagem_cadastro_sucesso(request)
+    if request.method == "POST":
+        if form.is_valid():
+            pe02.valor = int(pe02.valor) + 1
+            pe02.save()
+            pedido = form.save()
+            # mensagem_cadastro_sucesso(request)
 
-        return redirect('confirmar-itens-pedido', pedido.pk)
+            return redirect('confirmar-itens-pedido', pedido.pk)
+        else:
+            messages.error(request, 'Número do pedido está configurado para não receber letras')
+
     return render(request, template_name, {'form': form})
 
 
@@ -176,6 +185,9 @@ def editar_pedido(request, id_pedido, template_name='pedidos/pedido_form.html'):
             form.save()
 
             return redirect('pedidos')
+
+        else:
+            messages.error(request, 'Número do pedido está configurado para não receber letras')
     else:
         form = PedidoForm(instance=pedido)
     return render(request, template_name, {'form': form, 'id': id_pedido})

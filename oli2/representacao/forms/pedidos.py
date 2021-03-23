@@ -1,7 +1,10 @@
+from django.core.exceptions import ValidationError
+
 from ..models import *
 from django import forms
 from django.forms import ModelForm
 from tempus_dominus.widgets import DatePicker
+from django.shortcuts import get_object_or_404
 
 
 class FormaPagamentoForm(ModelForm):
@@ -15,7 +18,18 @@ class PesquisaFormaPagamentoForm(forms.Form):
     prazo = forms.CharField(required=False, max_length=200)
 
 
+def temLetra(valor):
+    pe01 = get_object_or_404(Configuracoes, pk=1)
+
+    if valor.isdigit() or eval(pe01.valor):
+        return valor
+    else:
+        raise ValidationError('Número do pedido está configurado para não receber caracteres')
+
+
 class PedidoForm(ModelForm):
+    numero_pedido = forms.CharField(validators=[temLetra])
+
     class Meta:
         model = Pedidos
         fields = '__all__'
