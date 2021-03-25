@@ -160,7 +160,6 @@ def cadastrar_pedido(request, template_name='pedidos/pedido_form.html'):
             pe02.valor = int(pe02.valor) + 1
             pe02.save()
             pedido = form.save()
-            # mensagem_cadastro_sucesso(request)
 
             return redirect('confirmar-itens-pedido', pedido.pk)
         else:
