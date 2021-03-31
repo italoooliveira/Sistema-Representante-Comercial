@@ -1,0 +1,79 @@
+{% extends 'partials/dashboard.html' %}
+{% load widget_tweaks %}
+{% block content %}
+{{ form.media.css }}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Cadastro de empresas</h1>
+    <div>
+        <form action="{{ request.path }}" method="post" enctype='multipart/form-data' id="formulario">
+            {% include 'partials/submit.html' %}
+            <div class="form-row mt-2">
+                <div class="form-group col-md-4">
+                    <label class="font-weight-bold">Chamada</label>
+                    {% render_field form.chamada class="form-control" %}
+                </div>
+                <div class="form-group col-md-8">
+                    <label class="font-weight-bold">Descrição</label>
+                    {% render_field form.descricao class="form-control" %}
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="font-weight-bold">Empresa</label>
+                    {% render_field form.empresa class="form-control" id="empresa" %}
+                </div>
+                <div class="form-group col-md-12">
+                    <label class="font-weight-bold">Produtos</label>
+                    {% render_field form.produtos class="form-control" id="produtos" %}
+                </div>
+            </div>
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% include 'partials/scripts.html' %}
+{% block custom-scripts %}
+{{ form.media.js }}
+<script>
+    $(document).ready(function () {
+        let produtos = []
+
+        $("#empresa").change(() => {
+            let id_empresa = $("#empresa option:selected").val();
+            console.log(id_empresa);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'retorna-informacoes-produtos-empresa' %}",
+                data: JSON.stringify(id_empresa),
+                contentType: 'application/json',
+                async: false,
+                success: (data) => {
+                    produtos = [];
+
+                    for(let i=0; i<data.produtos_empresa.length; i++)
+                        produtos[i] = {text: data.produtos_empresa[i].descricao,
+                                        id: parseInt(data.produtos_empresa[i].id_produto)};
+                },
+                error: (data) =>{
+                    console.log(data.responseText);
+                }
+            })
+            console.log(produtos)
+            $('#produtos').djangoSelect2({data:produtos});
+        })
+    })
+</script>
+{% endblock %}
+{% include 'partials/footer.html' %}

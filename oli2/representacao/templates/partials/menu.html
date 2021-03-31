@@ -13,7 +13,7 @@
         <div id="collapseConfiguracoes" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="py-2 collapse-inner rounded">
                 <a class="collapse-item" href="{% url 'cadastrar-minha-empresa' %}">Minha empresa</a>
-                <a class="collapse-item" href="{% url 'configuracoes-pedidos' %}">Configurações dos Pedidos</a>
+                <a class="collapse-item" href="{% url 'configuracoes-pedidos' %}">Configurações dos<br/>Pedidos</a>
             </div>
         </div>
     </li>
@@ -116,4 +116,17 @@
             </div>
         </div>
     </li>
+    {% if cg01 %}
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCustomizacoes" aria-expanded="true" aria-controls="collapseCustomizacoes">
+            <i class="fa fa-chart-bar" aria-hidden="true"></i>
+            <span>Customizações</span>
+        </a>
+        <div id="collapseCustomizacoes" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{% url 'ofertas' %}">Ofertas</a>
+            </div>
+        </div>
+    </li>
+    {% endif %}
 </ul>

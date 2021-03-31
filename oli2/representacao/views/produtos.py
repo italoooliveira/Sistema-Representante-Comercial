@@ -239,6 +239,7 @@ def cadastrar_produto(request, template_name='produtos/produto_form.html'):
     form = ProdutoForm(request.POST or None)
 
     if form.is_valid():
+        print(request.POST["empresa"])
         form = ProdutoForm(request.POST, request.FILES)
         new = form.save(commit=False)
         new.save()

@@ -5,6 +5,7 @@ from .produtos import *
 from .pedidos import *
 from .configuracoes import *
 from .relatorios import *
+from .customizacoes import *
 
 
 def login(request, template_name='usuarios/login.html'):
@@ -36,4 +37,5 @@ def logout(request, template_name='usuarios/login.html'):
 
 @login_required
 def index(request, template_name='index.html'):
-    return render(request, template_name)
+    cg01 = get_object_or_404(Configuracoes, pk=3)
+    return render(request, template_name, {'cg01': eval(cg01.valor)})

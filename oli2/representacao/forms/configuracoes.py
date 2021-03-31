@@ -5,4 +5,5 @@ from django.forms import ModelForm
 class ConfiguracoesForm(forms.Form):
     pe01 = forms.BooleanField(required=False)
     pe02 = forms.CharField(max_length=100)
+    cg01 = forms.BooleanField(required=False)
 

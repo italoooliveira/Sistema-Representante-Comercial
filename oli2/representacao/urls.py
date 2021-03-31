@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from . import views
 
@@ -80,5 +80,7 @@ urlpatterns = [
     path('tarefas/cadastrar', views.cadastrar_tarefa, name='cadastrar-tarefa'),
     path('editar/tarefa/<int:id_tarefa>', views.editar_tarefa, name="editar-tarefa"),
     path('excluir/tarefa<int:id_tarefa>', views.excluir_tarefa, name="excluir-tarefa"),
-    path('configuracoes/pedidos', views.configuracoes_pedidos, name="configuracoes-pedidos")
+    path('configuracoes/pedidos', views.configuracoes_pedidos, name="configuracoes-pedidos"),
+    path('ofertas', views.criar_oferta, name='ofertas'),
+    path('ofertas/retorna_informacoes_produtos_empresa', views.retorna_informacoes_produtos_empresa, name='retorna-informacoes-produtos-empresa')
 ]

@@ -1,0 +1,56 @@
+{% load static %}
+{% include 'partials/header.html' %}
+{% block custom-js %}
+<script src="{% static 'dist/js/html2canvas.min.js'%}" type="text/javascript"></script>
+{% endblock %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="d-flex" id="oferta">
+    <div class="text-center" style="text-align:center;width=500px;max-width:500px;min-width=500px;margin:0 auto">
+        <img src="media/{{logo}}" width="200">
+        <p class="font-weight-bold h2 mb-4" id="chamada">{{ chamada }}</p>
+        <table class="text-center table table-bordered">
+            <tr>
+                <th>Número</th>
+                <th>Produto</th>
+                <th>Preço</th>
+            </tr>
+            {% for produto in produtos %}
+            <tr>
+                <td>{{ produto.codigo_produto }}</td>
+                <td>{{ produto.descricao }}</td>
+                <td>{{ produto.custo_unitario }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <p class="font-weight-bold h3 mt-4" >{{ descricao }}</p>
+        <img src="media/{{logoMinhaEmpresa}}" width="200">
+    </div>
+</div>
+<div class="w-100 mt-4" style="display: flex; justify-content: center;">
+    <a class="btn btn-danger" style="margin-right: 5px" href="ofertas">Voltar</a>
+    <a id="download" class="btn btn-success">Baixar</a>
+</div>
+{% endblock %}
+{% include 'partials/scripts.html' %}
+{% block custom-scripts %}
+<script>
+    $(document).ready(() => {
+        html2canvas($('#oferta')[0]).then((canvas) => {
+            let data = new Date();
+            let dd = data.getDate();
+            let mm = data.getMonth()+1;
+            let yyyy = data.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            $('#download').attr('href', canvas.toDataURL());
+            $('#download').attr('download', $('#chamada').html()+"-"+dd+"-"+mm+"-"+yyyy);
+        })
+    })
+</script>
+{% endblock %}
+{% include 'partials/footer.html' %}
