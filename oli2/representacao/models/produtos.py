@@ -43,9 +43,6 @@ class Produtos(models.Model):
     imagem = models.ImageField(null=True, blank=True, upload_to='produtos/')
     ean = models.FloatField(default=0, null=True, blank=True)
     dun = models.FloatField(default=0, null=True, blank=True)
-    #preco_embalagem = models.FloatField(default=0, blank=True)
-    #possui_multiplo_venda = models.BooleanField()
-    #multiplo = models.IntegerField(default=0, blank=True)
     preco_total = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     id_unidade_venda = models.ForeignKey(UnidadesVenda, on_delete=models.PROTECT)
     id_tipo_embalagem = models.ForeignKey(TiposEmbalagem, on_delete=models.PROTECT)
@@ -53,4 +50,4 @@ class Produtos(models.Model):
     empresa = models.ManyToManyField(Empresas)
 
     def __str__(self):
-        return self.descricao
+        return self.codigo_produto + ' - ' + self.descricao

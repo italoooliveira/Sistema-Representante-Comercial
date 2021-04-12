@@ -10,5 +10,5 @@ class CustomizacoesForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(CustomizacoesForm, self).__init__(*args, **kwargs)
-        #self.fields['produtos'].queryset = Produtos.objects.none()
         self.fields['empresa'].queryset = Empresas.objects.all()
+        self.fields['produtos'].queryset = Produtos.objects.all()

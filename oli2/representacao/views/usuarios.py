@@ -135,7 +135,9 @@ def excluir_usuario(request, id_usuario):
 @login_required
 def listar_tarefas(request, template_name="usuarios/lista_tarefas.html"):
     form = PesquisaTarefaForm(request.GET or None)
-    listaTarefas = Tarefas.objects.order_by('id_tarefa')
+
+    listaTarefas = Tarefas.objects
+
     id_user = request.user.id
 
     if 'descricao_tarefa' in request.GET:

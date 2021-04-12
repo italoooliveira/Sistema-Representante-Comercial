@@ -5,13 +5,13 @@
 {% endblock %}
 {% load widget_tweaks %}
 {% block content %}
-<div class="d-flex" id="oferta">
-    <div class="text-center" style="text-align:center;width=500px;max-width:500px;min-width=500px;margin:0 auto">
-        <img src="media/{{logo}}" width="200">
-        <p class="font-weight-bold h2 mb-4" id="chamada">{{ chamada }}</p>
-        <table class="text-center table table-bordered">
+<div class="d-flex" >
+    <div id="oferta" class="text-center" style="text-align:center;width=500px;max-width:500px;min-width=500px;margin:0 auto;border: 1px solid #dcd7d7;">
+        <img style="max-width:80%" class="mt-3" src="{{ logo_empresa }}">
+        <h1 class="font-weight-bold my-3" style="color: #000" id="chamada">{{ chamada }}</h1>
+        <table class="text-center table table-bordered" style="font-size:18px">
             <tr>
-                <th>Número</th>
+                <th>Código</th>
                 <th>Produto</th>
                 <th>Preço</th>
             </tr>
@@ -19,16 +19,16 @@
             <tr>
                 <td>{{ produto.codigo_produto }}</td>
                 <td>{{ produto.descricao }}</td>
-                <td>{{ produto.custo_unitario }}</td>
+                <td>R$ {{ produto.custo_unitario }}</td>
             </tr>
             {% endfor %}
         </table>
-        <p class="font-weight-bold h3 mt-4" >{{ descricao }}</p>
-        <img src="media/{{logoMinhaEmpresa}}" width="200">
+        <h2 class="font-weight-bold mt-3" style="color: #000">{{ descricao }}</h2>
+        <img style="max-width:80%" src="{{logo_minha_empresa}}">
     </div>
 </div>
 <div class="w-100 mt-4" style="display: flex; justify-content: center;">
-    <a class="btn btn-danger" style="margin-right: 5px" href="ofertas">Voltar</a>
+    <a class="btn btn-danger" style="margin-right: 5px" href="{% url 'ofertas' %}">Voltar</a>
     <a id="download" class="btn btn-success">Baixar</a>
 </div>
 {% endblock %}
@@ -41,12 +41,14 @@
             let dd = data.getDate();
             let mm = data.getMonth()+1;
             let yyyy = data.getFullYear();
+
             if (dd < 10) {
                 dd = '0' + dd;
             }
             if (mm < 10) {
                 mm = '0' + mm;
             }
+
             $('#download').attr('href', canvas.toDataURL());
             $('#download').attr('download', $('#chamada').html()+"-"+dd+"-"+mm+"-"+yyyy);
         })

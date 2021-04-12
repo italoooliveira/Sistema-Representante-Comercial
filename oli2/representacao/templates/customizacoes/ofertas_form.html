@@ -3,10 +3,18 @@
 {% block content %}
 {{ form.media.css }}
 <div class="container-fluid">
-    <h1 class="h3 mb-4 text-gray-800">Cadastro de empresas</h1>
+    <h1 class="h3 mb-4 text-gray-800">Gerador de ofertas</h1>
     <div>
-        <form action="{{ request.path }}" method="post" enctype='multipart/form-data' id="formulario">
-            {% include 'partials/submit.html' %}
+        <form action="{{ request.path }}" method="post" enctype='multipart/form-data'>
+            {% csrf_token %}
+            <div class="form-row mb-2">
+                <div class="form-group mr-2 mb-0 col-md-5">
+                    <input type="submit" class="btn btn-primary mb-2" value="Gerar imagem"/>
+                </div>
+            </div>
+            <div class="form-row mb-2">
+                {% include 'partials/mensagens.html' %}
+            </div>
             <div class="form-row mt-2">
                 <div class="form-group col-md-4">
                     <label class="font-weight-bold">Chamada</label>
@@ -25,20 +33,6 @@
                     {% render_field form.produtos class="form-control" id="produtos" %}
                 </div>
             </div>
-            {% if form.errors %}
-                {% for field in form %}
-                    {% for error in field.errors %}
-                        <div class="alert alert-danger">
-                            <strong>{{ error|escape }}</strong>
-                        </div>
-                    {% endfor %}
-                {% endfor %}
-                {% for error in form.non_field_errors %}
-                    <div class="alert alert-danger">
-                        <strong>{{ error|escape }}</strong>
-                    </div>
-                {% endfor %}
-            {% endif %}
         </form>
     </div>
 </div>
@@ -50,9 +44,11 @@
     $(document).ready(function () {
         let produtos = []
 
+        $("#produtos").html("");
+
         $("#empresa").change(() => {
             let id_empresa = $("#empresa option:selected").val();
-            console.log(id_empresa);
+
             $.ajax({
                 type: "POST",
                 url: "{% url 'retorna-informacoes-produtos-empresa' %}",
@@ -60,18 +56,21 @@
                 contentType: 'application/json',
                 async: false,
                 success: (data) => {
-                    produtos = [];
-
-                    for(let i=0; i<data.produtos_empresa.length; i++)
-                        produtos[i] = {text: data.produtos_empresa[i].descricao,
-                                        id: parseInt(data.produtos_empresa[i].id_produto)};
+                     for(let i=0; i < data.produtos_empresa.length; i++)
+                     {
+                        produtos[i] =
+                        {
+                            text: data.produtos_empresa[i].descricao,
+                            id: parseInt(data.produtos_empresa[i].id_produto)
+                        };
+                     }
                 },
                 error: (data) =>{
                     console.log(data.responseText);
                 }
             })
-            console.log(produtos)
-            $('#produtos').djangoSelect2({data:produtos});
+
+            $("#produtos").djangoSelect2({data:produtos, multiple:true});
         })
     })
 </script>

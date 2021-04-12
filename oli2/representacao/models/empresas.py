@@ -1,6 +1,6 @@
 from .usuarios import Usuarios
 from django.db import models
-
+from django.conf import settings
 
 class TiposEmpresa(models.Model):
     id_tipo_empresa = models.AutoField(primary_key=True)

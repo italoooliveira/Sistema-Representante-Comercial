@@ -116,10 +116,10 @@
             </div>
         </div>
     </li>
-    {% if cg01 %}
+    {% if request.session.cg01 %}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCustomizacoes" aria-expanded="true" aria-controls="collapseCustomizacoes">
-            <i class="fa fa-chart-bar" aria-hidden="true"></i>
+            <i class="fa fa-wrench" aria-hidden="true"></i>
             <span>Customizações</span>
         </a>
         <div id="collapseCustomizacoes" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">

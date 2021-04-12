@@ -38,4 +38,7 @@ def logout(request, template_name='usuarios/login.html'):
 @login_required
 def index(request, template_name='index.html'):
     cg01 = get_object_or_404(Configuracoes, pk=3)
-    return render(request, template_name, {'cg01': eval(cg01.valor)})
+
+    request.session['cg01'] = eval(cg01.valor)
+
+    return render(request, template_name)
