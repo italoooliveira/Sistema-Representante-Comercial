@@ -5,4 +5,4 @@ from .pessoas import *
 from .produtos import *
 from .relatorios import *
 from .usuarios import *
-from .tokens import *
+#from .tokens import *
