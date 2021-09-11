@@ -1,5 +1,4 @@
-from django.contrib import auth, messages
-
+from django.contrib import messages, auth
 
 def mensagem_edicao_sucesso(request):
     messages.success(request, 'Atualizado com sucesso')

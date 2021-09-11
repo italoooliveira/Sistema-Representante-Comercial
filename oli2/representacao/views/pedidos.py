@@ -7,6 +7,7 @@ from django.http import HttpResponse, JsonResponse
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
 from .funcoes import *
 import json
 
@@ -131,6 +132,12 @@ def listar_pedidos(request, template_name='pedidos/lista_pedidos.html'):
             usuario = get_object_or_404(Usuarios, pk=usuario_responsavel)
             listaPedido = listaPedido.filter(id_usuario=usuario)
 
+    if 'status_pedido' in request.GET:
+        status_pedido = request.GET['status_pedido']
+
+        if status_pedido:
+            listaPedido = listaPedido.filter(status=status_pedido)
+
     listaPedido = listaPedido.select_related('id_empresa_representada','id_empresa_cliente').all()
     paginator = Paginator(listaPedido, 15)
     page = request.GET.get('page')
@@ -144,13 +151,20 @@ def listar_pedidos(request, template_name='pedidos/lista_pedidos.html'):
 @login_required
 def cadastrar_pedido(request, template_name='pedidos/pedido_form.html'):
     form = PedidoForm(request.POST or None)
+    pe02 = get_object_or_404(Configuracoes, pk=2)
 
-    if form.is_valid():
-        pedido = form.save()
+    form.fields['numero_pedido'].initial = pe02.valor
 
-        #mensagem_cadastro_sucesso(request)
+    if request.method == "POST":
+        if form.is_valid():
+            pe02.valor = int(pe02.valor) + 1
+            pe02.save()
+            pedido = form.save()
 
-        return redirect('confirmar-itens-pedido', pedido.pk)
+            return redirect('confirmar-itens-pedido', pedido.pk)
+        else:
+            messages.error(request, 'Número do pedido está configurado para não receber letras')
+
     return render(request, template_name, {'form': form})
 
 
@@ -170,6 +184,9 @@ def editar_pedido(request, id_pedido, template_name='pedidos/pedido_form.html'):
             form.save()
 
             return redirect('pedidos')
+
+        else:
+            messages.error(request, 'Número do pedido está configurado para não receber letras')
     else:
         form = PedidoForm(instance=pedido)
     return render(request, template_name, {'form': form, 'id': id_pedido})

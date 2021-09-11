@@ -1,5 +1,6 @@
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth import views as auth_views
+from .customizacoes_urls import urlpatterns as customizacoes_urls
 from . import views
 
 urlpatterns = [
@@ -75,5 +76,12 @@ urlpatterns = [
     path('excluir/tendencia/<int:id_acompanhamento>', views.excluir_acompanhamento, name='excluir-acompanhamento'),
     path('prospecoes-clientes', views.prospeccoes_clientes, name="prospeccoes-clientes"),
     path('clientes-sem-pedido', views.clientes_sem_pedido, name="clientes-sem-pedido"),
-    path('cancelamentos-pedidos-por-cliente', views.cancelamento_pedidos_por_cliente, name="cancelamentos-pedidos-clientes")
+    path('cancelamentos-pedidos-por-cliente', views.cancelamento_pedidos_por_cliente, name="cancelamentos-pedidos-clientes"),
+    path('tarefas', views.listar_tarefas, name='tarefas'),
+    path('tarefas/cadastrar', views.cadastrar_tarefa, name='cadastrar-tarefa'),
+    path('editar/tarefa/<int:id_tarefa>', views.editar_tarefa, name="editar-tarefa"),
+    path('excluir/tarefa<int:id_tarefa>', views.excluir_tarefa, name="excluir-tarefa"),
+    path('configuracoes/pedidos', views.configuracoes_pedidos, name="configuracoes-pedidos"),
 ]
+
+urlpatterns += customizacoes_urls

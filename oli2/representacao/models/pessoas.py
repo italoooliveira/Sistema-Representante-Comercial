@@ -47,7 +47,7 @@ class PrepostoClientes(models.Model):
 
 class Contatos(models.Model):
     id_contato = models.AutoField(primary_key=True)
-    nome_contato = models.CharField(max_length=255, null=True, blank=True, db_index=True)
+    nome_contato = models.CharField(max_length=255, null=True, db_index=True)
     possui_vinculo_empresa = models.BooleanField()
     possui_vinculo_cliente = models.BooleanField()
     telefone = models.CharField(max_length=80, null=True, blank=True)

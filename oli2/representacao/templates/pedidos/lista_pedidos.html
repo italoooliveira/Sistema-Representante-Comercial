@@ -30,6 +30,10 @@
                         <label class="font-weight-bold">Cliente</label>
                         {% render_field form.empresa_cliente class="form-control" %}
                     </div>
+                    <div class="form-group col-md-12">
+                        <label class="font-weight-bold">Status do Pedido</label>
+                        {% render_field form.status_pedido class="form-control" %}
+                    </div>
                 </div>
                 <div class="form-row mb-2">
                     <div class="form-group mr-2 mb-0 col-md-5">
@@ -57,10 +61,12 @@
                             <div class="mb-4">
                                 <a href="{% url 'gerar-pdf-pedido' pedido.id_pedido %}" target="_blank" class="text-danger ont-weight-bold" style="font-size: 18px"><i class="fa fa-file-pdf" aria-hidden="true"></i> Gerar PDF</a>
                             </div>
+                            {% if user.is_superuser %}
                             <div class="d-flex">
                                 <a href="{% url 'editar-pedido' pedido.id_pedido %}" class="btn btn-success text-white">Editar</a>
                                 <a href="{% url 'excluir-pedido' pedido.id_pedido %}" class="btn btn-danger ml-2 text-white">Excluir</a>
                             </div>
+                            {% endif %}
                         </li>
                     {% endfor %}
                 </ul>

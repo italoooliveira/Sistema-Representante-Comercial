@@ -7,3 +7,10 @@ oli2/representacao/models/__pycache__/
 oli2/representacao/views/__pycache__/
 oli2/representacao/forms/__pycache__/
 oli2/representacao/functions/__pycache__/
+oli2/api/__pycache__/*
+oli2/api/migrations/__pycache__/
+oli2/api/models/__pycache__/
+oli2/api/views/__pycache__/
+oli2/api/forms/__pycache__/
+oli2/api/functions/__pycache__/
+requirements windows.txt

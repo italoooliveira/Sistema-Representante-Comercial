@@ -1,0 +1,25 @@
+{% extends 'partials/dashboard.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Configurações dos Pedidos</h1>
+    <div>
+        <form action="{{ request.path }}" method="post">
+            <div class="form-row mt-2">
+                <div class="form-group col-md-12">
+                    {% render_field form.pe01%}
+                    <label class="ml-2">{{ pe01.descricao }}</label>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="ml-2">{{ pe02.descricao }}</label>
+                    {% render_field form.pe02 class="form-control"%}
+                </div>
+            </div>
+            {% include 'partials/submit.html' %}
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block custom-scripts %}
+    {% include 'partials/pesquisa_script.html' %}
+{% endblock %}

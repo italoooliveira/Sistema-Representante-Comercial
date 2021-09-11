@@ -1,5 +1,6 @@
 {% extends 'partials/dashboard.html' %}
 {% load widget_tweaks %}
+{% url 'cadastrar-usuario' as cadastrar_usuario_url %}
 {% block content %}
 <div class="container-fluid">
     <h1 class="h3 mb-4 text-gray-800">Cadastro de usuários</h1>
@@ -12,7 +13,11 @@
                     {% render_field form.email class="form-control" placeholder="Ex: joao@gmail.com" %}
                 </div>
                 <div class="form-group col-md-3">
-                    <label class="font-weight-bold">Senha</label>
+                    <label class="font-weight-bold">
+                        {% if request.path == cadastrar_usuario_url %} Senha
+                        {% else %} Nova Senha
+                        {% endif %}
+                    </label>
                     {% render_field form.senha class="form-control" placeholder="Ex: @EmpresaX21" %}
                 </div>
                 <div class="form-group col-md-4">

@@ -28,8 +28,8 @@ class TiposEmbalagem(models.Model):
 
 class Produtos(models.Model):
     id_produto = models.AutoField(primary_key=True)
-    codigo_produto = models.CharField(max_length=150, null=True, blank=True, db_index=True)
-    descricao = models.CharField(max_length=255, null=True, blank=True, db_index=True)
+    codigo_produto = models.CharField(max_length=150, null=True, db_index=True)
+    descricao = models.CharField(max_length=255, null=True, db_index=True)
     custo_unitario = models.DecimalField(default=0, blank=True, max_digits=10, decimal_places=2)
     comissao = models.DecimalField(default=0, blank=True, max_digits=5, decimal_places=2)
     ipi = models.FloatField(default=0, null=True, blank=True)
@@ -43,9 +43,6 @@ class Produtos(models.Model):
     imagem = models.ImageField(null=True, blank=True, upload_to='produtos/')
     ean = models.FloatField(default=0, null=True, blank=True)
     dun = models.FloatField(default=0, null=True, blank=True)
-    #preco_embalagem = models.FloatField(default=0, blank=True)
-    #possui_multiplo_venda = models.BooleanField()
-    #multiplo = models.IntegerField(default=0, blank=True)
     preco_total = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     id_unidade_venda = models.ForeignKey(UnidadesVenda, on_delete=models.PROTECT)
     id_tipo_embalagem = models.ForeignKey(TiposEmbalagem, on_delete=models.PROTECT)
@@ -53,4 +50,4 @@ class Produtos(models.Model):
     empresa = models.ManyToManyField(Empresas)
 
     def __str__(self):
-        return self.descricao
+        return self.codigo_produto + ' - ' + self.descricao

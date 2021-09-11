@@ -1,6 +1,6 @@
 from .usuarios import Usuarios
 from django.db import models
-
+from django.conf import settings
 
 class TiposEmpresa(models.Model):
     id_tipo_empresa = models.AutoField(primary_key=True)
@@ -19,7 +19,7 @@ class MinhaEmpresa(models.Model):
 
     id_minha_empresa = models.AutoField(primary_key=True)
     logo = models.ImageField(null=True, blank=True, upload_to='minha-empresa/')
-    razao_social = models.CharField(max_length=255, null=True, blank=True, db_index=True)
+    razao_social = models.CharField(max_length=255, null=True, db_index=True)
     nome_fantasia = models.CharField(max_length=255, null=True, blank=True, db_index=True)
     cnpj = models.CharField(max_length=25, null=True, blank=True, db_index=True)
     tipo_ie = models.CharField(max_length=30, choices=TIPO_IE_CHOICES, null=True)
@@ -45,7 +45,7 @@ class Empresas(models.Model):
 
     id_empresa = models.AutoField(primary_key=True)
     logo = models.ImageField(null=True, blank=True, upload_to='empresas/')
-    razao_social = models.CharField(max_length=255, null=True, blank=True, db_index=True)
+    razao_social = models.CharField(max_length=255, null=True, db_index=True)
     nome_fantasia = models.CharField(max_length=255, null=True, blank=True, db_index=True)
     cnpj = models.CharField(max_length=25, null=True, blank=True, db_index=True)
     tipo_ie = models.CharField(max_length=30, choices=TIPO_IE_CHOICES, null=True)
@@ -87,7 +87,7 @@ class Clientes(models.Model):
 
     id_cliente = models.AutoField(primary_key=True)
     logo = models.ImageField(null=True, blank=True, upload_to='clientes/')
-    razao_social = models.CharField(max_length=255, null=True, blank=True, db_index=True)
+    razao_social = models.CharField(max_length=255, null=True, db_index=True)
     nome_fantasia = models.CharField(max_length=255, null=True, blank=True, db_index=True)
     cnpj = models.CharField(max_length=25, db_index=True)
     tipo_ie = models.TextField(max_length=30, choices=TIPO_IE_CHOICES, null=True, blank=True)
