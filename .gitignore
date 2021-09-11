@@ -13,4 +13,6 @@ oli2/api/models/__pycache__/
 oli2/api/views/__pycache__/
 oli2/api/forms/__pycache__/
 oli2/api/functions/__pycache__/
+oli2/api/serializers/__pycache__
+oli2/static/*
 requirements windows.txt

@@ -41,4 +41,5 @@ def index(request, template_name='index.html'):
 
     request.session['cg01'] = eval(cg01.valor)
 
+
     return render(request, template_name)
